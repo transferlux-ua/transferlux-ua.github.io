@@ -202,6 +202,9 @@ main { min-height: 50vh; }
 .done__title { font-family: var(--display); font-size: 28px; }
 .done__status { color: var(--warn); font-weight: 500; }
 .contact-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.direct { display: grid; gap: 14px; }
+.direct .lead { margin: 0; }
+.msg-preview { border: 1px solid var(--line); border-left: 2px solid var(--gold); border-radius: var(--r-sm); padding: 12px 14px; color: var(--text-2); font-size: 14px; background: var(--surface); }
 
 /* ---------- panels ---------- */
 .lead { color: var(--text-2); font-size: 15px; margin-bottom: 16px; }

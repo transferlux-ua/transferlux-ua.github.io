@@ -5,7 +5,7 @@ import { quote, toUah, fmtEur, fmtUah } from "../../shared/price";
 import { api, newIdem, type RouteInfo, type Rate, type Trip } from "../api";
 import { LOCALE, CONTACTS, type Lang, type T } from "../i18n";
 import { Sheet } from "./Sheet";
-import { Swap, Minus, Plus, Chevron, Telegram, WhatsApp } from "./Icons";
+import { Swap, Minus, Plus, Chevron, Telegram, WhatsApp, Phone } from "./Icons";
 
 type Mode = "regular" | "individual";
 const cityName = (c: City | null, lang: Lang) => (c ? c.name[lang] : "");
@@ -113,7 +113,7 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
           <Stepper label={t.children} value={s.children} min={0} max={20} onChange={(v) => set({ children: v })} />
         </div>
         <button className="btn btn--primary btn--block" type="submit" disabled={!canGo}>
-          {s.mode === "regular" ? t.searchBtn : t.requestBtn}<Chevron />
+          {s.mode === "regular" ? t.searchBtn : t.contactBtn}<Chevron />
         </button>
         {!canGo && s.text.length > 2 && <p className="search__hint">{t.notRecognized}</p>}
       </form>
@@ -195,12 +195,29 @@ function Result({ lang, t, s, fromQ, toQ, onMode }: { lang: Lang; t: T; s: Searc
       {s.mode === "regular" && trip && (
         <BookingForm lang={lang} t={t} kind="regular" s={s} route={route} trip={trip} onBack={() => setTrip(null)} />
       )}
-      {s.mode === "individual" && (
-        <>
-          <p className="muted">{t.individualNote}</p>
-          <BookingForm lang={lang} t={t} kind="individual" s={s} route={route} />
-        </>
-      )}
+      {s.mode === "individual" && <DirectContact lang={lang} t={t} s={s} route={route} />}
+    </div>
+  );
+}
+
+/** Individual trip: no price, the client writes to the manager in the channel he prefers. */
+function DirectContact({ lang, t, s, route }: { lang: Lang; t: T; s: SearchState; route: RouteInfo }) {
+  const a = CITY_BY_ID[route.from.id]?.name[lang] ?? route.from.label;
+  const b = CITY_BY_ID[route.to.id]?.name[lang] ?? route.to.label;
+  const msg = t.msgIndividual(a, b, fmtDate(s.date, lang), t.passengers(s.adults, s.children));
+  const enc = encodeURIComponent(msg);
+  const [copied, setCopied] = useState(false);
+  const copy = () => { navigator.clipboard?.writeText(msg).then(() => setCopied(true)).catch(() => {}); };
+  return (
+    <div className="direct">
+      <p className="lead">{t.individualLead}</p>
+      <div className="msg-preview">{msg}</div>
+      <div className="contacts">
+        <a className="contact" href={`${CONTACTS.telegram}?text=${enc}`} target="_blank" rel="noopener" onClick={copy}><Telegram /><span><b>Telegram</b><small>{CONTACTS.telegramLabel}</small></span><Chevron /></a>
+        <a className="contact" href={`${CONTACTS.whatsapp}?text=${enc}`} target="_blank" rel="noopener"><WhatsApp /><span><b>WhatsApp</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
+        <a className="contact" href={`tel:${CONTACTS.phone}`}><Phone /><span><b>{t.call}</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
+      </div>
+      <p className="muted small">{copied ? t.msgCopied : t.msgHint}</p>
     </div>
   );
 }
@@ -235,7 +252,7 @@ function BookingForm({ lang, t, kind, s, route, trip, onBack }: { lang: Lang; t:
     try {
       const res = kind === "regular" && trip
         ? await api.booking({ ...base, trip_id: trip.id })
-        : await api.request({ ...base, from: CITY_BY_ID[route.from.id]?.name.uk ?? route.from.label, to: CITY_BY_ID[route.to.id]?.name.uk ?? route.to.label, date: s.date, km: route.km });
+        : await api.request({ ...base, from: CITY_BY_ID[route.from.id]?.name.uk ?? route.from.label, to: CITY_BY_ID[route.to.id]?.name.uk ?? route.to.label, from_id: route.from.id, to_id: route.to.id, date: s.date, km: route.km });
       setNum(res.id); setState("done");
     } catch (x: any) {
       const c = x?.code;
@@ -273,7 +290,7 @@ function BookingForm({ lang, t, kind, s, route, trip, onBack }: { lang: Lang; t:
       <label className="field"><span className="field__label">{t.notes}</span><textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t.notesPh} rows={2} maxLength={600} /></label>
       <input className="hp" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} name="website" aria-hidden="true" />
       {err && <div className="notice notice--warn" role="alert"><p>{err}</p>{err === t.errNet && <ContactRow t={t} />}</div>}
-      <button className="btn btn--primary btn--block" type="submit" disabled={state === "sending"}>{state === "sending" ? t.sending : kind === "regular" ? t.send : t.requestBtn}</button>
+      <button className="btn btn--primary btn--block" type="submit" disabled={state === "sending"}>{state === "sending" ? t.sending : t.send}</button>
     </form>
   );
 }

@@ -157,12 +157,19 @@ async function handleRequest(req: Request, env: Env, ctx: ExecutionContext): Pro
   if (prev) return json(req, env, { id: prev.id, status: prev.status, duplicate: true });
   const hash = await ipHash(req);
   if (await tooMany(env, hash)) return json(req, env, { error: "rate_limited" }, 429);
-  const km = typeof b.km === "number" && b.km > 0 && b.km < 10000 ? Math.round(b.km * 10) / 10 : null;
+  // price is calculated on the server from the real road distance (never trusted from the browser)
+  let km: number | null = null;
+  const fromId = clean(b.from_id, 80), toId = clean(b.to_id, 80);
+  if (fromId && toId) {
+    const r = await routeBetween(env, fromId, toId).catch(() => null);
+    if (r && "km" in r && typeof r.km === "number") km = r.km;
+  }
+  const priceCents = km ? quote(km, adults, children).totalCents : null;
   const ins = await env.DB.prepare(
-    "INSERT INTO bookings (kind, from_text, to_text, travel_date, adults, children, name, phone, contact, notes, km, lang, status, idem, ip_hash, created) VALUES ('individual', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?) RETURNING id"
-  ).bind(from, to, date, adults, children, name, phone, clean(b.contact, 20), clean(b.notes, 600), km, clean(b.lang, 5), idem, hash, Date.now()).first<{ id: number }>();
+    "INSERT INTO bookings (kind, from_text, to_text, travel_date, adults, children, name, phone, contact, notes, price_cents, km, lang, status, idem, ip_hash, created) VALUES ('individual', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?) RETURNING id"
+  ).bind(from, to, date, adults, children, name, phone, clean(b.contact, 20), clean(b.notes, 600), priceCents, km, clean(b.lang, 5), idem, hash, Date.now()).first<{ id: number }>();
   ctx.waitUntil(notifyAdmins(env, await bookingCard(env, ins!.id), ins!.id));
-  return json(req, env, { id: ins!.id, status: "pending" });
+  return json(req, env, { id: ins!.id, status: "pending", price_cents: priceCents });
 }
 
 async function listTrips(env: Env, from: string | null, to: string | null, date: string | null) {
