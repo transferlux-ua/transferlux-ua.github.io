@@ -39,7 +39,7 @@ export function render(lang: Lang, routeSlug: string | null) {
     {
       "@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", name: "TransferLux", url: SITE + "/",
       logo: SITE + "/brand/icon-512.png", telephone: CONTACTS.phone, sameAs: [CONTACTS.channel],
-      contactPoint: [{ "@type": "ContactPoint", telephone: CONTACTS.phone, contactType: "reservations", availableLanguage: ["Ukrainian", "Russian", "English"] }]
+      contactPoint: [{ "@type": "ContactPoint", telephone: CONTACTS.phone, contactType: "reservations", availableLanguage: ["Ukrainian", "English"] }]
     }
   ];
   if (route) {

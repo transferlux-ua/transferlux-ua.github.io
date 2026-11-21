@@ -7,7 +7,7 @@ import "./styles.css";
 declare global { interface Window { __TL__?: { lang: Lang; route: string | null } } }
 
 function fromPath(): { lang: Lang; route: string | null } {
-  const m = location.pathname.match(/^\/(ru|en)?\/?(?:routes\/([a-z-]+)\/?)?/);
+  const m = location.pathname.match(/^\/(en)?\/?(?:routes\/([a-z-]+)\/?)?/);
   return { lang: (m?.[1] as Lang) || "uk", route: m?.[2] ?? null };
 }
 

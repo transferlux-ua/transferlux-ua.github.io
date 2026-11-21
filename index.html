@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0c">
+<script>
+  /* theme before first paint: dark by default, light only if chosen earlier */
+  (function () {
+    var t = "dark";
+    try { if (localStorage.getItem("tl-theme") === "light") t = "light"; } catch (e) {}
+    document.documentElement.setAttribute("data-theme", t);
+    if (t === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#ffffff");
+  })();
+</script>
 <!--head-->
 <link rel="icon" href="/brand/tl-mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">

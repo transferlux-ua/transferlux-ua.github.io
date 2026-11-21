@@ -1,11 +1,11 @@
 /* Interface texts. Rule: plain punctuation only, no dashes or arrows in copy. */
-export type Lang = "uk" | "ru" | "en";
-export const LANGS: Lang[] = ["uk", "ru", "en"];
-export const LOCALE: Record<Lang, string> = { uk: "uk-UA", ru: "ru-RU", en: "en-GB" };
-export const PREFIX: Record<Lang, string> = { uk: "/", ru: "/ru/", en: "/en/" };
+export type Lang = "uk" | "en";
+export const LANGS: Lang[] = ["uk", "en"];
+export const LOCALE: Record<Lang, string> = { uk: "uk-UA", en: "en-GB" };
+export const PREFIX: Record<Lang, string> = { uk: "/", en: "/en/" };
 
 /** Slavic plural: forms = [one, few, many] */
-export function plural(lang: "uk" | "ru", n: number, forms: [string, string, string]): string {
+export function plural(lang: "uk", n: number, forms: [string, string, string]): string {
   const r = new Intl.PluralRules(lang).select(n);
   return r === "one" ? forms[0] : r === "few" ? forms[1] : forms[2];
 }
@@ -21,6 +21,7 @@ const uk = {
   adults: "Дорослі", children: "Діти до 14 років",
   searchBtn: "Знайти рейси", calcBtn: "Розрахувати", requestBtn: "Запросити вартість",
   contactBtn: "Написати менеджеру",
+  themeLight: "Світла тема", themeDark: "Темна тема",
   individualLead: "Індивідуальну поїздку узгоджуємо особисто. Оберіть, де вам зручно написати, текст ми вже підготували.",
   msgIndividual: (a: string, b: string, d: string, p: string) => `Доброго дня! Хочу замовити індивідуальну поїздку ${a} ${b}. Дата: ${d}. Пасажири: ${p}.`,
   msgHint: "У WhatsApp текст з'явиться сам. Для Telegram ми скопіюємо його, вставте у чат.",
@@ -67,61 +68,6 @@ const uk = {
 
 type Dict = typeof uk;
 
-const ru: Dict = {
-  metaTitle: "TransferLux. Пассажирские перевозки Украина Европа",
-  metaDesc: "Комфортные пассажирские перевозки между Украиной и Европой. Расчёт цены по реальному расстоянию, регулярные рейсы и индивидуальные поездки на Mercedes-Benz Sprinter и Volkswagen.",
-  navFleet: "Автопарк", navTrips: "Рейсы", navTeam: "Команда", navContacts: "Контакты", menu: "Меню", close: "Закрыть",
-  heroA: "Европа", heroB: "Украина", heroSub: "Комфортные пассажирские перевозки",
-  modeRegular: "Регулярный рейс", modeIndividual: "Индивидуальная поездка",
-  routeLabel: "Откуда и куда", routePh: "Например: Прага Киев",
-  from: "Откуда", to: "Куда", swap: "Поменять местами", date: "Дата",
-  adults: "Взрослые", children: "Дети до 14 лет",
-  searchBtn: "Найти рейсы", calcBtn: "Рассчитать", requestBtn: "Запросить стоимость",
-  contactBtn: "Написать менеджеру",
-  individualLead: "Индивидуальную поездку согласуем лично. Выберите, где вам удобно написать, текст мы уже подготовили.",
-  msgIndividual: (a, b, d, p) => `Добрый день! Хочу заказать индивидуальную поездку ${a} ${b}. Дата: ${d}. Пассажиры: ${p}.`,
-  msgHint: "В WhatsApp текст появится сам. Для Telegram мы скопируем его, вставьте в чат.",
-  msgCopied: "Текст скопирован. Вставьте его в чат Telegram и отправьте.",
-  recognized: "Маршрут", notRecognized: "Укажите два города, например: Львов Варшава",
-  pickCity: "Выберите город",
-  loading: "Считаем маршрут по дорогам",
-  km: "км", onRoad: "в пути", noBorder: "без ожидания на границе", via: "Пункт пропуска",
-  adultTicket: "Взрослый билет", childTicket: "Ребёнок до 14 лет включительно", total: "Итого",
-  passengers: (a, c) => `${a} ${plural("ru", a, ["взрослый", "взрослых", "взрослых"])}${c ? `, ${c} ${plural("ru", c, ["ребёнок", "ребёнка", "детей"])}` : ""}`,
-  rateNote: (r, d) => `Курс НБУ ${r} ₴ за 1 € на ${d}`,
-  rateDown: "Курс гривны временно недоступен, цена указана в евро.",
-  tripsTitle: "Рейсы на эти даты", noTrips: "На эти даты регулярных рейсов пока нет.", noTripsHint: "Оставьте заявку на индивидуальную поездку, менеджер предложит вариант.",
-  seatsLeft: (n) => (n === 0 ? "Мест нет" : `Свободных мест: ${n}`),
-  choose: "Выбрать", requestIndividual: "Индивидуальная поездка",
-  individualNote: "Стоимость индивидуальной поездки рассчитывает менеджер с учётом адресов, даты и пожеланий.",
-  bookTitle: "Заявка на бронирование", name: "Имя", phone: "Телефон", contactBy: "Как с вами связаться",
-  cTelegram: "Telegram", cWhatsapp: "WhatsApp", cCall: "Звонок",
-  notes: "Пожелания", notesPh: "Адрес, багаж, животные, детское кресло",
-  send: "Отправить заявку", sending: "Отправляем",
-  okTitle: "Заявка зарегистрирована", okStatus: "Статус: Ожидает подтверждения",
-  okText: "Менеджер свяжется с вами и подтвердит бронирование. До подтверждения места удерживаются за вами, но бронь ещё не окончательная.",
-  okTextInd: "Менеджер свяжется с вами, чтобы согласовать детали и подтвердить поездку.",
-  number: "Номер заявки",
-  errValidation: "Проверьте имя и номер телефона.", errSeats: "На этот рейс уже недостаточно свободных мест.",
-  errDup: "Заявка с этим номером на этот рейс уже есть. Менеджер свяжется с вами.", errRate: "Слишком много заявок. Попробуйте чуть позже или напишите нам.",
-  errNet: "Не удалось отправить заявку. Напишите нам напрямую, мы ответим.",
-  errRoute: "Не удалось найти автомобильный маршрут между этими городами.", errRouteDown: "Сервис маршрутов временно недоступен. Попробуйте ещё раз или напишите менеджеру.",
-  errPlace: "Не нашли город. Проверьте название.",
-  fleetTitle: "Автопарк", fleetLead: "Mercedes-Benz Sprinter и пассажирские микроавтобусы Volkswagen. Индивидуальные кресла с регулировкой наклона.",
-  exterior: "Снаружи", interior: "Салон", photoNote: "Фото автомобилей компании.",
-  tripsAll: "Ближайшие рейсы", tripsEmpty: "Расписание обновляется. Напишите менеджеру, чтобы узнать ближайшие рейсы.",
-  teamTitle: "Команда", teamText: "Водители TransferLux. Люди, которые каждый день заботятся о вашей безопасности и спокойствии в дороге.",
-  contactsTitle: "Контакты", manager: "Менеджер Владимир", channel: "Telegram канал", call: "Позвонить", write: "Написать",
-  popular: "Популярные направления", fromPrice: "от", schemeTitle: "Украина и Европа",
-  routePageTitle: (a, b) => `Пассажирские перевозки ${a} ${b}`,
-  routeFacts: "О маршруте", distanceRoad: "Расстояние по дорогам", travelTime: "Время в пути", border: "Пункт пропуска", priceAdult: "Цена для взрослого", priceChild: "Ребёнок до 14 лет",
-  backHome: "На главную", reverse: "Обратное направление", otherRoutes: "Другие направления",
-  routeText: (a, b, km, t, via) =>
-    `Поездка ${a} ${b} занимает около ${t} за рулём, расстояние ${km} км по автомобильным дорогам${via ? `, границу пересекаем через пункт пропуска ${via}` : ""}. Время на границе зависит от очереди и не входит в эту оценку. Цена билета рассчитана по реальному расстоянию, дети до 14 лет включительно едут со скидкой 50%.`,
-  footer: "Пассажирские перевозки между Украиной и странами Европы.",
-  hours: "ч", minutes: "мин", today: "сегодня"
-};
-
 const en: Dict = {
   metaTitle: "TransferLux. Passenger transport Ukraine Europe",
   metaDesc: "Comfortable passenger transport between Ukraine and Europe. Prices based on real road distance, scheduled trips and private transfers in Mercedes-Benz Sprinter and Volkswagen minibuses.",
@@ -133,6 +79,7 @@ const en: Dict = {
   adults: "Adults", children: "Children up to 14",
   searchBtn: "Find trips", calcBtn: "Calculate", requestBtn: "Request a price",
   contactBtn: "Message the manager",
+  themeLight: "Light theme", themeDark: "Dark theme",
   individualLead: "Private trips are arranged personally. Choose where you would like to write, the message is already prepared.",
   msgIndividual: (a, b, d, p) => `Hello! I would like to book a private trip ${a} ${b}. Date: ${d}. Passengers: ${p}.`,
   msgHint: "In WhatsApp the text appears automatically. For Telegram we copy it, paste it into the chat.",
@@ -177,7 +124,7 @@ const en: Dict = {
   hours: "h", minutes: "min", today: "today"
 };
 
-export const DICT: Record<Lang, Dict> = { uk, ru, en };
+export const DICT: Record<Lang, Dict> = { uk, en };
 export type T = Dict;
 
 export const CONTACTS = {

@@ -5,7 +5,7 @@ export interface RouteInfo {
   to: { id: string; label: string; cc: string };
   km: number;
   minutes: number;
-  via: { id: string; name: { uk: string; ru: string; en: string } } | null;
+  via: { id: string; name: { uk: string; en: string } } | null;
 }
 export interface Trip { id: number; from_id: string; to_id: string; depart_date: string; depart_time: string; seats_total: number; seats_free: number }
 export interface Rate { rate: number; date: string }

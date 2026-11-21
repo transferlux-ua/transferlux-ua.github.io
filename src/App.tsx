@@ -8,7 +8,27 @@ import { Search, fmtDuration } from "./ui/Search";
 import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
 import { Fleet, Trips, Team, Contacts } from "./ui/Panels";
-import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone } from "./ui/Icons";
+import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Sun, Moon } from "./ui/Icons";
+
+type Theme = "dark" | "light";
+function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }) {
+  // server render is always dark; the real value is read after hydration
+  const [theme, setTheme] = useState<Theme>("dark");
+  useEffect(() => { setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark"); }, []);
+  const flip = () => {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#ffffff" : "#0b0b0c");
+    try { localStorage.setItem("tl-theme", next); } catch { /* private mode */ }
+  };
+  const label = theme === "dark" ? labels.toLight : labels.toDark;
+  return (
+    <button type="button" className="icon-btn theme-btn" onClick={flip} aria-label={label} title={label}>
+      {theme === "dark" ? <Sun /> : <Moon />}
+    </button>
+  );
+}
 
 type Panel = "fleet" | "trips" | "team" | "contacts" | "menu" | null;
 export interface AppProps { lang: Lang; route?: SeoRoute | null }
@@ -35,7 +55,7 @@ export function App({ lang: initialLang, route }: AppProps) {
     document.title = route ? `${t.routePageTitle(CITY_BY_ID[route.from].name[lang], CITY_BY_ID[route.to].name[lang])} | TransferLux` : t.metaTitle;
   }, [lang]);
 
-  const names: Record<string, string> = { ua: { uk: "Україна", ru: "Украина", en: "Ukraine" }[lang] };
+  const names: Record<string, string> = { ua: { uk: "Україна", en: "Ukraine" }[lang] };
   for (const k of ["paris", "brussels", "amsterdam", "berlin", "prague", "vienna", "milan", "warsaw", "budapest"]) names[k] = CITY_BY_ID[k].name[lang];
 
   const nav: [Panel, string][] = [["fleet", t.navFleet], ["trips", t.navTrips], ["team", t.navTeam], ["contacts", t.navContacts]];
@@ -59,6 +79,7 @@ export function App({ lang: initialLang, route }: AppProps) {
                 onClick={(e) => { e.preventDefault(); switchLang(l); }}>{l === "uk" ? "UA" : l.toUpperCase()}</a>
             ))}
           </div>
+          <ThemeToggle labels={{ toLight: t.themeLight, toDark: t.themeDark }} />
           <a className="icon-btn top__tg" href={CONTACTS.telegram} target="_blank" rel="noopener" aria-label="Telegram"><Telegram /></a>
           <button type="button" className="icon-btn top__menu" aria-label={t.menu} onClick={() => setPanel("menu")}><Menu /></button>
         </div>
