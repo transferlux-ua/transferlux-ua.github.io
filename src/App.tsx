@@ -81,7 +81,7 @@ export function App({ lang: initialLang, route }: AppProps) {
             <Search key={preset ? `${preset.from}-${preset.to}-${preset.n}` : "s"} lang={lang} t={t} preset={preset ?? undefined} autoOpen={!!preset && preset.n > 0} />
           </div>
           <figure className="hero__media">
-            <img src="/img/vw-black-exterior.jpg" srcSet="/img/vw-black-exterior-640.jpg 640w, /img/vw-black-exterior.jpg 1280w" sizes="(max-width: 900px) 100vw, 46vw" alt="TransferLux Volkswagen" {...{ fetchpriority: "high" }} width={1060} height={1280} />
+            <img src="/img/sprinter-black-door.jpg" alt="TransferLux Mercedes-Benz Sprinter" {...{ fetchpriority: "high" }} width={589} height={814} />
             <div className="hero__scheme"><Scheme names={names} title={t.schemeTitle} /></div>
           </figure>
         </section>

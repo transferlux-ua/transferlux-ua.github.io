@@ -61,7 +61,7 @@ export function render(lang: Lang, routeSlug: string | null) {
     `<meta property="og:title" content="${esc(title)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     `<meta property="og:url" content="${url}">`,
-    `<meta property="og:image" content="${SITE}/img/vw-black-exterior.jpg">`,
+    `<meta property="og:image" content="${SITE}/img/sprinter-white-two.jpg">`,
     `<meta property="og:locale" content="${LOCALE[lang].replace("-", "_")}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<script type="application/ld+json">${JSON.stringify(ld.length === 1 ? ld[0] : ld)}</script>`,
