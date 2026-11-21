@@ -8,6 +8,7 @@ import { Search, fmtDuration } from "./ui/Search";
 import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
 import { Fleet, Trips, Team, Contacts } from "./ui/Panels";
+import { Gallery } from "./ui/Gallery";
 import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Sun, Moon } from "./ui/Icons";
 
 type Theme = "dark" | "light";
@@ -58,7 +59,8 @@ export function App({ lang: initialLang, route }: AppProps) {
   const names: Record<string, string> = { ua: { uk: "Україна", en: "Ukraine" }[lang] };
   for (const k of ["paris", "brussels", "amsterdam", "berlin", "prague", "vienna", "milan", "warsaw", "budapest"]) names[k] = CITY_BY_ID[k].name[lang];
 
-  const nav: [Panel, string][] = [["fleet", t.navFleet], ["trips", t.navTrips], ["team", t.navTeam], ["contacts", t.navContacts]];
+  const nav: [Panel, string][] = [["fleet", t.navFleet], ["trips", t.navTrips], ["team", t.navTeam]];
+  const anchors: [string, string][] = [[route ? `${PREFIX[lang]}#gallery` : "#gallery", t.navGallery], ["#contacts", t.navContacts]];
   const r = route;
   const rFrom = r ? CITY_BY_ID[r.from].name[lang] : "";
   const rTo = r ? CITY_BY_ID[r.to].name[lang] : "";
@@ -71,6 +73,7 @@ export function App({ lang: initialLang, route }: AppProps) {
         </a>
         <nav className="nav" aria-label="main">
           {nav.map(([k, l]) => <button key={k} type="button" onClick={() => setPanel(k)}>{l}</button>)}
+          {anchors.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
         </nav>
         <div className="top__right">
           <div className="langs" role="group" aria-label="Language">
@@ -135,6 +138,24 @@ export function App({ lang: initialLang, route }: AppProps) {
             ))}
           </ul>
         </section>
+
+        {!r && (
+          <section className="block" id="gallery">
+            <h2 className="h2">{t.galleryTitle}</h2>
+            <Gallery title={t.galleryTitle} closeLabel={t.close} />
+          </section>
+        )}
+
+        <section className="block" id="contacts">
+          <h2 className="h2">{t.contactsTitle}</h2>
+          <p className="lead">{t.contactsLead}</p>
+          <div className="contacts-grid">
+            <a className="contact" href={`tel:${CONTACTS.phone}`}><Phone /><span><b>{CONTACTS.phoneLabel}</b><small>{t.manager}, {t.call.toLowerCase()}</small></span></a>
+            <a className="contact" href={CONTACTS.whatsapp} target="_blank" rel="noopener"><WhatsApp /><span><b>WhatsApp</b><small>{CONTACTS.phoneLabel}</small></span></a>
+            <a className="contact" href={CONTACTS.telegram} target="_blank" rel="noopener"><Telegram /><span><b>Telegram</b><small>{CONTACTS.telegramLabel}</small></span></a>
+            <a className="contact" href={CONTACTS.channel} target="_blank" rel="noopener"><Telegram /><span><b>{t.channel}</b><small>t.me/TransferLux</small></span></a>
+          </div>
+        </section>
       </main>
 
       <footer className="foot">
@@ -156,6 +177,7 @@ export function App({ lang: initialLang, route }: AppProps) {
       <Sheet open={panel === "menu"} title={t.menu} onClose={close} closeLabel={t.close}>
         <nav className="menu">
           {nav.map(([k, l]) => <button key={k} type="button" onClick={() => setPanel(k)}>{l}</button>)}
+          {anchors.map(([h, l]) => <a key={h} href={h} onClick={close}>{l}</a>)}
         </nav>
         <div className="langs langs--lg" role="group" aria-label="Language">
           {LANGS.map((l) => <button key={l} type="button" className={l === lang ? "is-on" : ""} onClick={() => switchLang(l)}>{l === "uk" ? "UA" : l.toUpperCase()}</button>)}
