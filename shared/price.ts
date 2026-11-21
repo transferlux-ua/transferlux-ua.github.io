@@ -29,7 +29,7 @@ export function toUah(cents: number, rate: number): number {
 }
 
 export function fmtEur(cents: number, locale: string): string {
-  return new Intl.NumberFormat(locale, { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100);
+  return new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100) + " €";
 }
 
 export function fmtUah(uah: number, locale: string): string {

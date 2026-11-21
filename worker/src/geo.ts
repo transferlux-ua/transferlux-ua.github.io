@@ -2,6 +2,8 @@
    Results are cached in D1. Public OSM services ask for a clear User-Agent
    and low request rates, the cache keeps us well within that. */
 import { CITY_BY_ID } from "../../shared/cities";
+import { CROSSINGS } from "../../shared/crossings";
+export { CROSSINGS };
 
 const UA = "TransferLux/2.0 (+https://transferlux-ua.github.io)";
 
@@ -55,19 +57,6 @@ async function photon(q: string, cc?: string): Promise<{ label: string; cc: stri
   return { label: `${f.properties.name}${f.properties.country ? ", " + f.properties.country : ""}`, cc: c, lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] };
 }
 
-/* Open passenger border crossings Ukraine <-> EU (Ukrainian side names).
-   Used as a via point so the route never goes through closed borders
-   (Belarus, Russia). Coordinates point at the checkpoint roads; OSRM snaps
-   them to the nearest road. */
-export const CROSSINGS = [
-  { id: "yahodyn", name: { uk: "Ягодин, Дорогуськ", ru: "Ягодин, Дорогуск", en: "Yahodyn, Dorohusk" }, lat: 51.1758, lon: 23.8139 },
-  { id: "rava-ruska", name: { uk: "Рава-Руська, Гребенне", ru: "Рава-Русская, Гребенне", en: "Rava-Ruska, Hrebenne" }, lat: 50.2583, lon: 23.6342 },
-  { id: "krakovets", name: { uk: "Краковець, Корчова", ru: "Краковец, Корчова", en: "Krakovets, Korczowa" }, lat: 49.9579, lon: 23.1012 },
-  { id: "shehyni", name: { uk: "Шегині, Медика", ru: "Шегини, Медыка", en: "Shehyni, Medyka" }, lat: 49.8015, lon: 22.9495 },
-  { id: "uzhhorod", name: { uk: "Ужгород, Вишнє Нємецке", ru: "Ужгород, Вышне Немецке", en: "Uzhhorod, Vysne Nemecke" }, lat: 48.6676, lon: 22.2638 },
-  { id: "chop", name: { uk: "Чоп, Захонь", ru: "Чоп, Захонь", en: "Chop, Zahony" }, lat: 48.4057, lon: 22.1802 },
-  { id: "porubne", name: { uk: "Порубне, Сірет", ru: "Порубное, Сирет", en: "Porubne, Siret" }, lat: 47.9902, lon: 26.0433 }
-];
 
 function hav(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
   const R = 6371, t = Math.PI / 180;
@@ -106,6 +95,12 @@ export async function roadRoute(db: D1Database, a: Place, b: Place): Promise<Rou
     for (const c of ranked) {
       const r = await osrm([a, c, b]);
       if (r && (!best || r.km < best.km)) best = { ...r, via: c.id };
+    }
+    // South of 50.5°N the shortest road cannot pass Belarus, so a direct
+    // route (for example Odesa via Moldova to Romania) is also safe.
+    if (Math.max(a.lat, b.lat) < 50.5) {
+      const r = await osrm([a, b]);
+      if (r && (!best || r.km < best.km)) best = { ...r, via: null };
     }
   } else {
     const r = await osrm([a, b]);

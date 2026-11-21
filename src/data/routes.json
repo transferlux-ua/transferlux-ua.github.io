@@ -1,0 +1,226 @@
+[
+    {
+        "from":  "kyiv",
+        "to":  "warsaw",
+        "km":  820.4,
+        "minutes":  696,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "krakow",
+        "km":  867.5,
+        "minutes":  690,
+        "via":  null
+    },
+    {
+        "from":  "kyiv",
+        "to":  "prague",
+        "km":  1402.4,
+        "minutes":  1001,
+        "via":  null
+    },
+    {
+        "from":  "kyiv",
+        "to":  "berlin",
+        "km":  1384.8,
+        "minutes":  1019,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "vienna",
+        "km":  1328.7,
+        "minutes":  974,
+        "via":  null
+    },
+    {
+        "from":  "kyiv",
+        "to":  "munich",
+        "km":  1700.6,
+        "minutes":  1218,
+        "via":  null
+    },
+    {
+        "from":  "kyiv",
+        "to":  "paris",
+        "km":  2400.1,
+        "minutes":  1582,
+        "via":  null
+    },
+    {
+        "from":  "kyiv",
+        "to":  "amsterdam",
+        "km":  2010.3,
+        "minutes":  1392,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "brussels",
+        "km":  2108.5,
+        "minutes":  1439,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "milan",
+        "km":  2103.9,
+        "minutes":  1579,
+        "via":  "uzhhorod"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "rome",
+        "km":  2344.8,
+        "minutes":  1721,
+        "via":  "chop"
+    },
+    {
+        "from":  "kyiv",
+        "to":  "budapest",
+        "km":  1119,
+        "minutes":  949,
+        "via":  null
+    },
+    {
+        "from":  "lviv",
+        "to":  "warsaw",
+        "km":  407.2,
+        "minutes":  371,
+        "via":  "rava-ruska"
+    },
+    {
+        "from":  "lviv",
+        "to":  "krakow",
+        "km":  326.6,
+        "minutes":  228,
+        "via":  null
+    },
+    {
+        "from":  "lviv",
+        "to":  "prague",
+        "km":  861.5,
+        "minutes":  539,
+        "via":  null
+    },
+    {
+        "from":  "lviv",
+        "to":  "berlin",
+        "km":  930,
+        "minutes":  589,
+        "via":  "krakovets"
+    },
+    {
+        "from":  "lviv",
+        "to":  "vienna",
+        "km":  787.7,
+        "minutes":  512,
+        "via":  null
+    },
+    {
+        "from":  "lviv",
+        "to":  "paris",
+        "km":  1869.9,
+        "minutes":  1136,
+        "via":  null
+    },
+    {
+        "from":  "lviv",
+        "to":  "brno",
+        "km":  655.2,
+        "minutes":  414,
+        "via":  null
+    },
+    {
+        "from":  "odesa",
+        "to":  "chisinau",
+        "km":  198.8,
+        "minutes":  209,
+        "via":  null
+    },
+    {
+        "from":  "odesa",
+        "to":  "bucharest",
+        "km":  542.9,
+        "minutes":  483,
+        "via":  null
+    },
+    {
+        "from":  "odesa",
+        "to":  "warsaw",
+        "km":  1187.9,
+        "minutes":  1066,
+        "via":  "rava-ruska"
+    },
+    {
+        "from":  "kharkiv",
+        "to":  "warsaw",
+        "km":  1297.8,
+        "minutes":  1087,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "dnipro",
+        "to":  "warsaw",
+        "km":  1299.7,
+        "minutes":  1083,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "vinnytsia",
+        "to":  "prague",
+        "km":  1222.5,
+        "minutes":  900,
+        "via":  null
+    },
+    {
+        "from":  "chernivtsi",
+        "to":  "prague",
+        "km":  1125.4,
+        "minutes":  829,
+        "via":  null
+    },
+    {
+        "from":  "uzhhorod",
+        "to":  "budapest",
+        "km":  333.3,
+        "minutes":  247,
+        "via":  null
+    },
+    {
+        "from":  "ternopil",
+        "to":  "prague",
+        "km":  989.3,
+        "minutes":  678,
+        "via":  null
+    },
+    {
+        "from":  "rivne",
+        "to":  "warsaw",
+        "km":  486.9,
+        "minutes":  440,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "lutsk",
+        "to":  "warsaw",
+        "km":  417.3,
+        "minutes":  379,
+        "via":  "yahodyn"
+    },
+    {
+        "from":  "ivano-frankivsk",
+        "to":  "prague",
+        "km":  987.4,
+        "minutes":  668,
+        "via":  null
+    },
+    {
+        "from":  "zhytomyr",
+        "to":  "warsaw",
+        "km":  680.8,
+        "minutes":  591,
+        "via":  "yahodyn"
+    }
+]
