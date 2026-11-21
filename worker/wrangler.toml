@@ -1,0 +1,17 @@
+name = "transferlux-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://transferlux-ua.github.io,http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173"
+SITE_URL = "https://transferlux-ua.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "transferlux"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# Secrets (never in git):
+#   BOT_TOKEN        Telegram bot token from @BotFather
+#   ADMIN_CODE       one time code to register an admin chat: /start <code>
+#   WEBHOOK_SECRET   checked against X-Telegram-Bot-Api-Secret-Token
