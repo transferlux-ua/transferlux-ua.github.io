@@ -9,7 +9,7 @@ SITE_URL = "https://transferlux-ua.github.io"
 [[d1_databases]]
 binding = "DB"
 database_name = "transferlux"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "0720a7be-5f14-4c03-908f-414bb8bbfca8"
 
 # Secrets (never in git):
 #   BOT_TOKEN        Telegram bot token from @BotFather

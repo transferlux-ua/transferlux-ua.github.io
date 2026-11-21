@@ -198,6 +198,19 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(req, env) });
     try {
       if (url.pathname === "/tg" && req.method === "POST") return handleTelegram(req, env, ctx);
+      // one time bot setup (token stays inside Cloudflare): /tg/setup?code=ADMIN_CODE
+      if (url.pathname === "/tg/setup") {
+        if (!env.ADMIN_CODE || url.searchParams.get("code") !== env.ADMIN_CODE) return new Response("forbidden", { status: 403 });
+        if (!env.BOT_TOKEN) return new Response("BOT_TOKEN is not set", { status: 400 });
+        const api = (m: string, body: unknown) => fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/${m}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then((r) => r.json());
+        const hook = await api("setWebhook", { url: `${url.origin}/tg`, secret_token: env.WEBHOOK_SECRET, allowed_updates: ["message", "callback_query"], drop_pending_updates: true });
+        const cmds = await api("setMyCommands", { commands: [
+          { command: "trips", description: "Найближчі рейси" }, { command: "add", description: "Додати рейс" },
+          { command: "bookings", description: "Нові заявки" }, { command: "all", description: "Останні заявки" }, { command: "help", description: "Довідка" }
+        ] });
+        const me = await api("getMe", {});
+        return json(req, env, { webhook: hook, commands: cmds, bot: (me as any)?.result?.username ?? null });
+      }
       if (url.pathname === "/api/health") return json(req, env, { ok: true });
       if (url.pathname === "/api/rate") {
         const r = await getRate(env);
