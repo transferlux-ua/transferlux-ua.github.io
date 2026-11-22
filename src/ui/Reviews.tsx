@@ -3,7 +3,8 @@ import { Chevron } from "./Icons";
 import { Lightbox } from "./Lightbox";
 
 /* Screenshots of real client messages, provided by the company. */
-const REVIEWS = Array.from({ length: 8 }, (_, i) => `/img/reviews/review-${String(i + 1).padStart(2, "0")}`);
+const NEW = [1, 2, 3, 4].map((n) => `/img/reviews/review-n${n}`);
+const REVIEWS = [...NEW, ...Array.from({ length: 8 }, (_, i) => `/img/reviews/review-${String(i + 1).padStart(2, "0")}`)];
 
 export function Reviews({ title, closeLabel, prevLabel, nextLabel }: { title: string; closeLabel: string; prevLabel: string; nextLabel: string }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -15,7 +16,7 @@ export function Reviews({ title, closeLabel, prevLabel, nextLabel }: { title: st
       <div className="reviews">
         <div className="reviews__row" ref={row}>
           {REVIEWS.map((r, i) => (
-            <button key={r} type="button" className="reviews__item" onClick={() => setOpen(i)} aria-label={`${title} ${i + 1}`}>
+            <button key={r} type="button" className={`reviews__item${NEW.includes(r) ? " reviews__item--fit" : ""}`} onClick={() => setOpen(i)} aria-label={`${title} ${i + 1}`}>
               <img src={`${r}-360.jpg`} alt="" loading="lazy" decoding="async" width={360} height={640} />
             </button>
           ))}
