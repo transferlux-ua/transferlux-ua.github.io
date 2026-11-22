@@ -12,7 +12,7 @@ export function plural(lang: "uk", n: number, forms: [string, string, string]): 
 
 const uk = {
   metaTitle: "TransferLux. Пасажирські перевезення Україна Європа",
-  metaDesc: "Комфортні пасажирські перевезення між Україною та Європою. Розрахунок ціни за реальною відстанню, регулярні рейси та індивідуальні поїздки на Mercedes-Benz Sprinter.",
+  metaDesc: "Комфортні пасажирські перевезення між Україною та Європою. Розрахунок ціни за реальною відстанню, регулярні рейси та індивідуальні поїздки на Mercedes-Benz Sprinter і V-Class.",
   navFleet: "Автопарк", navTrips: "Рейси", navTeam: "Команда", navContacts: "Контакти", menu: "Меню", close: "Закрити",
   heroA: "Європа", heroB: "Україна", heroSub: "Комфортні пасажирські перевезення",
   modeRegular: "Регулярний рейс", modeIndividual: "Індивідуальна поїздка",
@@ -59,7 +59,7 @@ const uk = {
   errNet: "Не вдалося надіслати заявку. Напишіть нам напряму, ми відповімо.",
   errRoute: "Не вдалося знайти автомобільний маршрут між цими містами.", errRouteDown: "Сервіс маршрутів тимчасово недоступний. Спробуйте ще раз або напишіть менеджеру.",
   errPlace: "Не знайшли місто. Перевірте назву.",
-  fleetTitle: "Автопарк", fleetLead: "Mercedes-Benz Sprinter з індивідуальними кріслами, що регулюються за нахилом.",
+  fleetTitle: "Автопарк", fleetLead: "Mercedes-Benz Sprinter та Mercedes-Benz V-Class з індивідуальними шкіряними кріслами.",
   exterior: "Зовні", interior: "Салон", photoNote: "Фото автомобілів компанії.",
   tripsAll: "Найближчі рейси", tripsEmpty: "Розклад оновлюється. Напишіть менеджеру, щоб дізнатися найближчі рейси.",
   teamTitle: "Команда", teamText: "Водії TransferLux. Люди, які щодня дбають про вашу безпеку та спокій у дорозі.",
@@ -78,7 +78,7 @@ type Dict = typeof uk;
 
 const en: Dict = {
   metaTitle: "TransferLux. Passenger transport Ukraine Europe",
-  metaDesc: "Comfortable passenger transport between Ukraine and Europe. Prices based on real road distance, scheduled trips and private transfers in Mercedes-Benz Sprinter vans.",
+  metaDesc: "Comfortable passenger transport between Ukraine and Europe. Prices based on real road distance, scheduled trips and private transfers in Mercedes-Benz Sprinter and V-Class.",
   navFleet: "Fleet", navTrips: "Trips", navTeam: "Team", navContacts: "Contacts", menu: "Menu", close: "Close",
   heroA: "Europe", heroB: "Ukraine", heroSub: "Comfortable passenger transport",
   modeRegular: "Scheduled trip", modeIndividual: "Private trip",
@@ -125,7 +125,7 @@ const en: Dict = {
   errNet: "Could not send the request. Please message us directly, we will reply.",
   errRoute: "No road route was found between these cities.", errRouteDown: "The routing service is temporarily unavailable. Try again or message the manager.",
   errPlace: "City not found. Please check the name.",
-  fleetTitle: "Fleet", fleetLead: "Mercedes-Benz Sprinter vans with individual reclining seats.",
+  fleetTitle: "Fleet", fleetLead: "Mercedes-Benz Sprinter and Mercedes-Benz V-Class with individual leather seats.",
   exterior: "Exterior", interior: "Interior", photoNote: "Photos of the company vehicles.",
   tripsAll: "Upcoming trips", tripsEmpty: "The schedule is being updated. Message the manager to learn about upcoming trips.",
   teamTitle: "Team", teamText: "TransferLux drivers. People who take care of your safety and comfort on the road every day.",

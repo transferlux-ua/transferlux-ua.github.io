@@ -6,6 +6,8 @@ import { Chevron, Mail, Phone, Telegram, WhatsApp } from "./Icons";
 const MAIN = "sprinter-white-two";
 const BLACK = ["sprinter-black-door"];
 const WHITE = ["seat-recliner-closeup", "interior-white-diamond"];
+const VCLASS_MAIN = "vclass-01";
+const VCLASS = ["vclass-02", "vclass-03", "vclass-04", "vclass-05", "vclass-06", "vclass-07"];
 
 function Photo({ name, alt, wide }: { name: string; alt: string; wide?: boolean }) {
   return (
@@ -26,6 +28,11 @@ export function Fleet({ t }: { t: T }) {
       <section className="fleet__group">
         <h3>{t.fleetWhite}</h3>
         <div className="fleet__grid">{WHITE.map((p) => <Photo key={p} name={p} alt={t.fleetWhite} />)}</div>
+      </section>
+      <section className="fleet__group">
+        <h3>Mercedes-Benz V-Class</h3>
+        <Photo name={VCLASS_MAIN} alt="Mercedes-Benz V-Class TransferLux" wide />
+        <div className="fleet__grid fleet__grid--square">{VCLASS.map((p) => <Photo key={p} name={p} alt="Mercedes-Benz V-Class" />)}</div>
       </section>
       <div className="notice">
         <p>{t.fleetAsk}</p>

@@ -147,6 +147,8 @@ h1, h2, h3, p { margin: 0; }
 .fleet__grid--one { grid-template-columns: minmax(0, 1fr); }
 .fleet__grid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-sm); }
 .fleet__grid--one img { aspect-ratio: 4 / 3; }
+.fleet__grid--square img { aspect-ratio: 1 / 1; }
+.fleet__group .fleet__main { margin-bottom: 8px; }
 .city-in { cursor: text; gap: 2px; padding: 9px 12px 8px; }
 .city-in:focus-within { border-color: var(--gold); }
 .city-in input { width: 100%; min-width: 0; height: 26px; padding: 0; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 16px; font-weight: 500; }
