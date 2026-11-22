@@ -33,7 +33,7 @@ function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }
   );
 }
 
-type Panel = "contacts" | "menu" | "terms" | null;
+type Panel = "team" | "contacts" | "menu" | "terms" | null;
 
 function TermsText({ lang }: { lang: Lang }) {
   const d = TERMS[lang];
@@ -85,7 +85,6 @@ export function App({ lang: initialLang, route }: AppProps) {
   const home = (id: string) => (route ? `${PREFIX[lang]}#${id}` : `#${id}`);
   const navItems: { label: string; href?: string; panel?: Panel }[] = [
     { label: t.navFleet, href: home("fleet") },
-    { label: t.navTeam, href: home("team") },
     { label: t.navReviews, href: home("reviews") },
     { label: t.navContacts, href: "#contacts" }
   ];
@@ -178,13 +177,6 @@ export function App({ lang: initialLang, route }: AppProps) {
         )}
 
         {!r && (
-          <section className="block" id="team">
-            <h2 className="h2">{t.teamTitle}</h2>
-            <Team t={t} />
-          </section>
-        )}
-
-        {!r && (
           <section className="block" id="reviews">
             <h2 className="h2">{t.reviewsTitle}</h2>
             <p className="lead">{t.reviewsLead}</p>
@@ -218,6 +210,7 @@ export function App({ lang: initialLang, route }: AppProps) {
         <p className="muted small">© {new Date().getFullYear()} TransferLux · <button type="button" className="link" onClick={() => setPanel("terms")}>{t.terms}</button></p>
       </footer>
 
+      <Sheet open={panel === "team"} title={t.teamTitle} onClose={close} closeLabel={t.close} wide><Team t={t} /></Sheet>
       <Sheet open={panel === "terms"} title={t.terms} onClose={close} closeLabel={t.close} wide><TermsText lang={lang} /></Sheet>
       <Sheet open={panel === "contacts"} title={t.contactsTitle} onClose={close} closeLabel={t.close}><Contacts t={t} /></Sheet>
       <Sheet open={panel === "menu"} title={t.menu} onClose={close} closeLabel={t.close}>
@@ -225,6 +218,7 @@ export function App({ lang: initialLang, route }: AppProps) {
           {navItems.map((it) => it.panel
             ? <button key={it.label} type="button" onClick={() => setPanel(it.panel!)}>{it.label}</button>
             : <a key={it.label} href={it.href} onClick={close}>{it.label}</a>)}
+          <button type="button" onClick={() => setPanel("team")}>{t.navTeam}</button>
           <button type="button" onClick={() => setPanel("terms")}>{t.terms}</button>
         </nav>
         <div className="langs langs--lg" role="group" aria-label="Language">
