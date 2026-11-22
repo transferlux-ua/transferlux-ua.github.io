@@ -4,8 +4,8 @@ import { Chevron, Mail, Phone, Telegram, WhatsApp } from "./Icons";
 import { Lightbox } from "./Lightbox";
 
 /* Fleet: every vehicle is shown the same way, one exterior photo first, then its interior.
-   Photos live in /img/fleet/<id>-<n>.jpg (n = 1 is the exterior). Licence plates are replaced
-   with a TransferLux plate, every photo has a small TL mark in the bottom left corner. */
+   Photos live in /img/fleet/<id>-<n>.jpg (n = 1 is the exterior). Original licence plates are kept,
+   every photo has a small TL mark in the bottom left corner. */
 type Car = { id: string; name: (t: T) => string; count: number; square?: boolean; pos?: string };
 const CARS: Car[] = [
   { id: "sprinter-black", name: (t) => t.fleetBlack, count: 4, pos: "50% 82%" },
