@@ -10,7 +10,6 @@ import { Search, fmtDuration } from "./ui/Search";
 import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
 import { Fleet, Team, Contacts } from "./ui/Panels";
-import { Gallery } from "./ui/Gallery";
 import { Reviews } from "./ui/Reviews";
 import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Mail, Sun, Moon } from "./ui/Icons";
 
@@ -85,7 +84,6 @@ export function App({ lang: initialLang, route }: AppProps) {
   const nav: [Panel, string][] = [["fleet", t.navFleet], ["team", t.navTeam]];
   const anchors: [string, string][] = [
     [route ? `${PREFIX[lang]}#reviews` : "#reviews", t.navReviews],
-    [route ? `${PREFIX[lang]}#gallery` : "#gallery", t.navGallery],
     ["#contacts", t.navContacts]
   ];
   const r = route;
@@ -172,13 +170,6 @@ export function App({ lang: initialLang, route }: AppProps) {
             <h2 className="h2">{t.reviewsTitle}</h2>
             <p className="lead">{t.reviewsLead}</p>
             <Reviews title={t.reviewsTitle} closeLabel={t.close} prevLabel={t.prev} nextLabel={t.next} />
-          </section>
-        )}
-
-        {!r && (
-          <section className="block" id="gallery">
-            <h2 className="h2">{t.galleryTitle}</h2>
-            <Gallery title={t.galleryTitle} closeLabel={t.close} />
           </section>
         )}
 
