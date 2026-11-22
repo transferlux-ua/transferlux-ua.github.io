@@ -271,8 +271,9 @@ main { min-height: 50vh; }
 .lead { color: var(--text-2); font-size: 15px; margin-bottom: 16px; }
 .fleet { display: grid; gap: clamp(28px, 4vw, 44px); }
 @keyframes fade { from { opacity: 0; } }
-.team img { border-radius: var(--r); width: 100%; height: auto; max-height: 64vh; object-fit: cover; object-position: 50% 70%; }
-.team .lead { margin-top: 16px; }
+.team img { display: block; border-radius: var(--r); width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 62%; }
+.team .lead { margin: 16px 0 0; max-width: 640px; }
+@media (max-width: 640px) { .team img { aspect-ratio: 4 / 5; object-position: 50% 70%; } }
 .contacts { display: grid; gap: 8px; }
 .contacts__who { color: var(--muted); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
 .contact { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r); transition: border-color 0.2s, background 0.2s; }
@@ -307,7 +308,7 @@ main { min-height: 50vh; }
 .nav a { padding: 8px 12px; border-radius: var(--r-sm); color: var(--text-2); font-size: 14px; transition: color 0.2s, background 0.2s; }
 .nav a:hover { color: var(--text); background: var(--surface); }
 .menu a { text-align: left; padding: 16px 0; font-family: var(--display); font-size: 30px; border-bottom: 1px solid var(--line); }
-#fleet, #reviews, #contacts { scroll-margin-top: 72px; }
+#fleet, #team, #reviews, #contacts { scroll-margin-top: 72px; }
 
 /* ---------- footer ---------- */
 .foot { border-top: 1px solid var(--line); padding: 32px var(--pad) 40px; display: grid; gap: 14px; max-width: 1360px; margin: 24px auto 0; }

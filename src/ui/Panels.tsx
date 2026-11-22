@@ -50,7 +50,8 @@ export function Fleet({ t }: { t: T }) {
 export function Team({ t }: { t: T }) {
   return (
     <div className="team">
-      <img src="/img/team-drivers.jpg" alt={t.teamTitle} width={1099} height={1280} loading="lazy" />
+      <img src="/img/team-drivers.jpg" srcSet="/img/team-drivers-640.jpg 640w, /img/team-drivers.jpg 1099w" sizes="(max-width: 760px) 100vw, 1280px"
+        alt={t.teamTitle} width={1099} height={1280} loading="lazy" decoding="async" />
       <p className="lead">{t.teamText}</p>
     </div>
   );
