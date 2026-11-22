@@ -1,9 +1,10 @@
 /* TransferLux tariff.
-   Adult ticket: 13 EUR per 100 km of real road distance + 25 EUR fixed.
+   Adult ticket: 10 EUR per 100 km of real road distance + 25 EUR fixed
+   (approved by the owner on 2026-11-22, replaces the earlier 13 EUR).
    Child 0 to 14 years inclusive: 50% of the adult ticket.
    All money is calculated in euro cents to avoid rounding drift. */
 
-export const TARIFF = { perHundredKm: 13, fixed: 25, childDiscount: 0.5, childMaxAge: 14 };
+export const TARIFF = { perHundredKm: 10, fixed: 25, childDiscount: 0.5, childMaxAge: 14 };
 
 export interface Quote {
   km: number;

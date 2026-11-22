@@ -11,24 +11,29 @@ async function load(file) {
 const { quote, toUah } = await load("shared/price.ts");
 const { parseRoute, suggestCities } = await load("shared/parse.ts");
 
-test("price: 1000 km = 155 EUR adult, 77.50 child", () => {
+test("price: 1000 km = 125 EUR adult, 62.50 child (10 EUR / 100 km + 25)", () => {
   const q = quote(1000, 1, 1);
-  assert.equal(q.adultCents, 15500);
-  assert.equal(q.childCents, 7750);
-  assert.equal(q.totalCents, 23250);
+  assert.equal(q.adultCents, 12500);
+  assert.equal(q.childCents, 6250);
+  assert.equal(q.totalCents, 18750);
 });
 test("price: proportional distance and rounding to cents", () => {
   const q = quote(345.6, 2, 3);
-  // 345.6/100*13 = 44.928 + 25 = 69.928 -> 69.93
-  assert.equal(q.adultCents, 6993);
-  assert.equal(q.childCents, 3497); // 34.965 rounds to 34.97
-  assert.equal(q.totalCents, 2 * 6993 + 3 * 3497);
+  // 345.6/100*10 = 34.56 + 25 = 59.56
+  assert.equal(q.adultCents, 5956);
+  assert.equal(q.childCents, 2978);
+  assert.equal(q.totalCents, 2 * 5956 + 3 * 2978);
+});
+test("price: 820.4 km (Kyiv Warsaw) = 107.04 EUR adult, 53.52 child", () => {
+  const q = quote(820.4, 1, 1);
+  assert.equal(q.adultCents, 10704);
+  assert.equal(q.childCents, 5352);
 });
 test("price: zero passengers gives zero total", () => {
   assert.equal(quote(500, 0, 0).totalCents, 0);
 });
 test("uah conversion rounds to hryvnia", () => {
-  assert.equal(toUah(15500, 49.5717), 7684);
+  assert.equal(toUah(15500, 49.5717), 7684); // 155.00 EUR x 49.5717
 });
 
 const cases = [

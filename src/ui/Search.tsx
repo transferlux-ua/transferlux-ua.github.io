@@ -65,8 +65,14 @@ export interface SearchState { text: string; from: string | null; to: string | n
 export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset?: { from: string; to: string }; autoOpen?: boolean }) {
   const [s, setS] = useState<SearchState>(() => ({
     text: preset ? `${CITY_BY_ID[preset.from].name[lang]} ${CITY_BY_ID[preset.to].name[lang]}` : "",
-    from: preset?.from ?? null, to: preset?.to ?? null, date: todayISO(1), adults: 1, children: 0, mode: "regular"
+    from: preset?.from ?? null, to: preset?.to ?? null, date: "", adults: 1, children: 0, mode: "regular"
   }));
+  // the page is pre rendered at build time, so the default date is set in the browser
+  const [minDate, setMinDate] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    setMinDate(todayISO());
+    setS((p) => (p.date ? p : { ...p, date: todayISO(1) }));
+  }, []);
   const [open, setOpen] = useState(!!autoOpen);
   const [unknown, setUnknown] = useState<string[]>([]);
   const from = s.from ? CITY_BY_ID[s.from] : null;
@@ -78,7 +84,7 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
     setS((p) => ({ ...p, text, from: r.from?.id ?? (text ? null : p.from), to: r.to?.id ?? (text ? null : p.to) }));
   };
   const set = (patch: Partial<SearchState>) => setS((p) => ({ ...p, ...patch }));
-  const canGo = !!((from || unknown[0]) && (to || unknown[from ? 0 : 1]));
+  const canGo = !!((from || unknown[0]) && (to || unknown[from ? 0 : 1])) && !!s.date;
   const submit = (e: React.FormEvent) => { e.preventDefault(); if (canGo) setOpen(true); };
 
   // free text fallback for cities outside the dictionary
@@ -107,7 +113,7 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
         <div className="search__row">
           <label className="field field--date">
             <span className="field__label">{t.date}</span>
-            <input type="date" value={s.date} min={todayISO()} onChange={(e) => set({ date: e.target.value })} />
+            <input type="date" value={s.date} min={minDate} onChange={(e) => set({ date: e.target.value })} />
           </label>
           <Stepper label={t.adults} value={s.adults} min={1} max={20} onChange={(v) => set({ adults: v })} />
           <Stepper label={t.children} value={s.children} min={0} max={20} onChange={(v) => set({ children: v })} />
