@@ -28,7 +28,7 @@ const uk: Terms = {
     {
       title: "3. Вартість",
       items: [
-        "3.1. Ціна квитка розраховується за реальною відстанню автомобільними дорогами: 10 € за кожні 100 км та 25 € фіксованої частини.",
+        "3.1. Ціна квитка розраховується за реальною відстанню автомобільними дорогами: 9 € за кожні 100 км та 20 € фіксованої частини.",
         "3.2. Діти до 14 років включно їдуть зі знижкою 50%.",
         "3.3. Ціна у гривнях наведена довідково за офіційним курсом Національного банку України на день розрахунку.",
         "3.4. Вартість індивідуальної поїздки узгоджується з менеджером окремо."
@@ -107,7 +107,7 @@ const en: Terms = {
     {
       title: "3. Price",
       items: [
-        "3.1. The ticket price is based on the real road distance: €10 for every 100 km plus a fixed €25.",
+        "3.1. The ticket price is based on the real road distance: €9 for every 100 km plus a fixed €20.",
         "3.2. Children up to 14 inclusive travel with a 50% discount.",
         "3.3. Hryvnia prices are for reference, at the official National Bank of Ukraine rate on the day of calculation.",
         "3.4. The price of a private trip is agreed with the manager separately."
