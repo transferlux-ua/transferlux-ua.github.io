@@ -12,13 +12,17 @@ export function plural(lang: "uk", n: number, forms: [string, string, string]): 
 
 const uk = {
   metaTitle: "TransferLux. Пасажирські перевезення Україна Європа",
-  metaDesc: "Комфортні пасажирські перевезення між Україною та Європою. Розрахунок ціни за реальною відстанню, регулярні рейси та індивідуальні поїздки на Mercedes-Benz Sprinter і Volkswagen.",
+  metaDesc: "Комфортні пасажирські перевезення між Україною та Європою. Розрахунок ціни за реальною відстанню, регулярні рейси та індивідуальні поїздки на Mercedes-Benz Sprinter.",
   navFleet: "Автопарк", navTrips: "Рейси", navTeam: "Команда", navContacts: "Контакти", menu: "Меню", close: "Закрити",
   heroA: "Європа", heroB: "Україна", heroSub: "Комфортні пасажирські перевезення",
   modeRegular: "Регулярний рейс", modeIndividual: "Індивідуальна поїздка",
   routeLabel: "Звідки і куди", routePh: "Наприклад: Прага Київ",
   from: "Звідки", to: "Куди", swap: "Поміняти місцями", date: "Дата",
   fromPh: "Київ", toPh: "Варшава",
+  askTitle: "Уточніть у менеджера", askText: "Індивідуальну поїздку, ціну та автомобіль узгоджуємо особисто. Напишіть або зателефонуйте, як вам зручно.",
+  email: "Пошта",
+  fleetBlack: "Mercedes-Benz Sprinter, чорний", fleetWhite: "Mercedes-Benz Sprinter, білий, салон",
+  fleetAsk: "Детальні фото та підбір автобуса під вашу поїздку уточнюйте в менеджера.",
   terms: "Умови перевезення", termsAgree: "Надсилаючи заявку, ви погоджуєтеся з умовами перевезення.",
   adults: "Дорослі", children: "Діти до 14 років",
   searchBtn: "Знайти рейси", calcBtn: "Розрахувати", requestBtn: "Запросити вартість",
@@ -55,7 +59,7 @@ const uk = {
   errNet: "Не вдалося надіслати заявку. Напишіть нам напряму, ми відповімо.",
   errRoute: "Не вдалося знайти автомобільний маршрут між цими містами.", errRouteDown: "Сервіс маршрутів тимчасово недоступний. Спробуйте ще раз або напишіть менеджеру.",
   errPlace: "Не знайшли місто. Перевірте назву.",
-  fleetTitle: "Автопарк", fleetLead: "Mercedes-Benz Sprinter та пасажирські мікроавтобуси Volkswagen. Індивідуальні крісла з регулюванням нахилу.",
+  fleetTitle: "Автопарк", fleetLead: "Mercedes-Benz Sprinter з індивідуальними кріслами, що регулюються за нахилом.",
   exterior: "Зовні", interior: "Салон", photoNote: "Фото автомобілів компанії.",
   tripsAll: "Найближчі рейси", tripsEmpty: "Розклад оновлюється. Напишіть менеджеру, щоб дізнатися найближчі рейси.",
   teamTitle: "Команда", teamText: "Водії TransferLux. Люди, які щодня дбають про вашу безпеку та спокій у дорозі.",
@@ -74,13 +78,17 @@ type Dict = typeof uk;
 
 const en: Dict = {
   metaTitle: "TransferLux. Passenger transport Ukraine Europe",
-  metaDesc: "Comfortable passenger transport between Ukraine and Europe. Prices based on real road distance, scheduled trips and private transfers in Mercedes-Benz Sprinter and Volkswagen minibuses.",
+  metaDesc: "Comfortable passenger transport between Ukraine and Europe. Prices based on real road distance, scheduled trips and private transfers in Mercedes-Benz Sprinter vans.",
   navFleet: "Fleet", navTrips: "Trips", navTeam: "Team", navContacts: "Contacts", menu: "Menu", close: "Close",
   heroA: "Europe", heroB: "Ukraine", heroSub: "Comfortable passenger transport",
   modeRegular: "Scheduled trip", modeIndividual: "Private trip",
   routeLabel: "From and to", routePh: "For example: Prague Kyiv",
   from: "From", to: "To", swap: "Swap", date: "Date",
   fromPh: "Kyiv", toPh: "Warsaw",
+  askTitle: "Ask the manager", askText: "Private trips, prices and vehicles are arranged personally. Message or call us in the way that suits you.",
+  email: "Email",
+  fleetBlack: "Mercedes-Benz Sprinter, black", fleetWhite: "Mercedes-Benz Sprinter, white, interior",
+  fleetAsk: "For more photos and to choose a vehicle for your trip, please contact the manager.",
   terms: "Terms of carriage", termsAgree: "By sending a request you agree to the terms of carriage.",
   adults: "Adults", children: "Children up to 14",
   searchBtn: "Find trips", calcBtn: "Calculate", requestBtn: "Request a price",
@@ -117,7 +125,7 @@ const en: Dict = {
   errNet: "Could not send the request. Please message us directly, we will reply.",
   errRoute: "No road route was found between these cities.", errRouteDown: "The routing service is temporarily unavailable. Try again or message the manager.",
   errPlace: "City not found. Please check the name.",
-  fleetTitle: "Fleet", fleetLead: "Mercedes-Benz Sprinter and Volkswagen passenger minibuses. Individual reclining seats.",
+  fleetTitle: "Fleet", fleetLead: "Mercedes-Benz Sprinter vans with individual reclining seats.",
   exterior: "Exterior", interior: "Interior", photoNote: "Photos of the company vehicles.",
   tripsAll: "Upcoming trips", tripsEmpty: "The schedule is being updated. Message the manager to learn about upcoming trips.",
   teamTitle: "Team", teamText: "TransferLux drivers. People who take care of your safety and comfort on the road every day.",
@@ -141,5 +149,6 @@ export const CONTACTS = {
   whatsapp: "https://wa.me/380930414853",
   telegram: "https://t.me/Transfer_Lux",
   telegramLabel: "@Transfer_Lux",
-  channel: "https://t.me/TransferLux"
+  channel: "https://t.me/TransferLux",
+  email: "transferlux01@gmail.com"
 };

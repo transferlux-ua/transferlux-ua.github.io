@@ -38,7 +38,7 @@ export function render(lang: Lang, routeSlug: string | null) {
   const ld: Record<string, unknown>[] = [
     {
       "@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#org", name: "TransferLux", url: SITE + "/",
-      logo: SITE + "/brand/icon-512.png", telephone: CONTACTS.phone, sameAs: [CONTACTS.channel],
+      logo: SITE + "/brand/icon-512.png", telephone: CONTACTS.phone, email: CONTACTS.email, sameAs: [CONTACTS.channel],
       contactPoint: [{ "@type": "ContactPoint", telephone: CONTACTS.phone, contactType: "reservations", availableLanguage: ["Ukrainian", "English"] }]
     }
   ];

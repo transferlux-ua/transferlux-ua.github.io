@@ -138,6 +138,15 @@ h1, h2, h3, p { margin: 0; }
 .pill__v { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pill--empty .pill__v { color: var(--muted); font-weight: 400; }
 .swap { color: var(--gold); }
+.ask { display: grid; gap: 10px; }
+.ask__title { margin: 0; font-family: var(--display); font-size: 26px; line-height: 1.1; }
+.ask .muted { margin: 0; }
+.fleet__main { width: 100%; border-radius: var(--r); aspect-ratio: 4 / 3; object-fit: cover; }
+.fleet__group h3 { margin: 6px 0 10px; font-size: 15px; font-weight: 600; }
+.fleet__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.fleet__grid--one { grid-template-columns: minmax(0, 1fr); }
+.fleet__grid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-sm); }
+.fleet__grid--one img { aspect-ratio: 4 / 3; }
 .city-in { cursor: text; gap: 2px; padding: 9px 12px 8px; }
 .city-in:focus-within { border-color: var(--gold); }
 .city-in input { width: 100%; min-width: 0; height: 26px; padding: 0; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 16px; font-weight: 500; }
@@ -254,18 +263,9 @@ main { min-height: 50vh; }
 
 /* ---------- panels ---------- */
 .lead { color: var(--text-2); font-size: 15px; margin-bottom: 16px; }
-.fleet .seg { margin-bottom: 12px; }
-.gallery { position: relative; border-radius: var(--r); overflow: hidden; background: var(--surface); aspect-ratio: 4 / 3; }
-.gallery > img { width: 100%; height: 100%; object-fit: cover; animation: fade 0.45s var(--ease) both; }
+.fleet { display: grid; gap: 16px; }
+.fleet .lead { margin: 0; }
 @keyframes fade { from { opacity: 0; } }
-.gallery__bar { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.gallery__nav { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #fff; }
-.gallery__nav span { background: rgba(11,11,12,0.55); padding: 4px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
-.thumbs { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 4px; scrollbar-width: none; }
-.thumbs::-webkit-scrollbar { display: none; }
-.thumbs button { flex: none; width: 72px; height: 54px; border-radius: 6px; overflow: hidden; opacity: 0.5; border: 1px solid transparent; transition: opacity 0.2s, border-color 0.2s; }
-.thumbs button.is-on { opacity: 1; border-color: var(--gold); }
-.thumbs img { width: 100%; height: 100%; object-fit: cover; }
 .team img { border-radius: var(--r); width: 100%; height: auto; max-height: 64vh; object-fit: cover; object-position: 50% 70%; }
 .team .lead { margin-top: 16px; }
 .contacts { display: grid; gap: 8px; }
@@ -283,6 +283,7 @@ main { min-height: 50vh; }
 .photo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: clamp(120px, 14vw, 200px); grid-auto-flow: dense; gap: 8px; }
 .photo-grid__item { position: relative; overflow: hidden; border-radius: var(--r-sm); background: var(--surface); cursor: zoom-in; }
 .photo-grid__item.is-big { grid-column: span 2; grid-row: span 2; }
+.photo-grid__item.is-team img { object-position: 50% 65%; }
 .photo-grid__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
 .photo-grid__item:hover img { transform: scale(1.04); }
 .lightbox { position: fixed; inset: 0; z-index: 80; background: rgba(5, 5, 6, 0.96); display: grid; place-items: center; touch-action: pan-y; }
@@ -293,7 +294,10 @@ main { min-height: 50vh; }
 .lightbox__count { position: absolute; top: 24px; left: 20px; color: rgba(255,255,255,0.7); font-size: 13px; font-variant-numeric: tabular-nums; }
 
 /* ---------- contacts section ---------- */
-.contacts-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.contacts-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.contacts-grid .contact { flex: 1 1 210px; min-width: 0; }
+.contact span { min-width: 0; }
+.contact small { overflow-wrap: anywhere; }
 .contacts-grid .contact { grid-template-columns: 24px 1fr; }
 .nav a { padding: 8px 12px; border-radius: var(--r-sm); color: var(--text-2); font-size: 14px; transition: color 0.2s, background 0.2s; }
 .nav a:hover { color: var(--text); background: var(--surface); }

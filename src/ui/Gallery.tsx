@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Chevron, Close } from "./Icons";
 
 /* Company photos (watermarked TL copies in /img). The Volkswagen minivan photo is
-   intentionally not here. 13 photos + one 2x2 tile = 16 cells, so the grid has no
-   empty cells on 4 columns (desktop) and on 2 columns (phone). */
+   intentionally not here. Two 2x2 tiles (Sprinters, team) + 8 photos = 16 cells, so the
+   grid has no empty cells on 4 columns (desktop) and on 2 columns (phone). */
 export const PHOTOS = [
   "sprinter-white-two", "sprinter-black-door", "sprinter-interior-light", "seat-recliner-closeup",
-  "seats-three-light", "interior-light-vip", "interior-white-diamond", "seats-grey-vip",
-  "vw-interior-brown", "interior-turquoise", "interior-purple",
-  "interior-brown-orange", "seat-detail-gold"
+  "interior-light-vip", "team-drivers", "seats-grey-vip", "vw-interior-brown",
+  "interior-turquoise", "seat-detail-gold"
 ];
+const BIG = new Set(["sprinter-white-two", "team-drivers"]);
 
 export function Gallery({ title, closeLabel }: { title: string; closeLabel: string }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -33,7 +33,7 @@ export function Gallery({ title, closeLabel }: { title: string; closeLabel: stri
     <>
       <div className="photo-grid">
         {PHOTOS.map((p, i) => (
-          <button key={p} type="button" className={`photo-grid__item${i === 0 ? " is-big" : ""}`} onClick={() => setOpen(i)} aria-label={`${title} ${i + 1}`}>
+          <button key={p} type="button" className={`photo-grid__item${BIG.has(p) ? " is-big" : ""}${p === "team-drivers" ? " is-team" : ""}`} onClick={() => setOpen(i)} aria-label={`${title} ${i + 1}`}>
             <img src={`/img/${p}-640.jpg`} alt="" loading="lazy" decoding="async" />
           </button>
         ))}

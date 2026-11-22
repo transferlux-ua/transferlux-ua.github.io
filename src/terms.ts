@@ -20,7 +20,7 @@ const uk: Terms = {
     {
       title: "2. Бронювання та підтвердження",
       items: [
-        "2.1. Заявку можна залишити на сайті, у Telegram, WhatsApp або телефоном. Після заявки місця утримуються за пасажиром зі статусом «Очікує підтвердження».",
+        "2.1. Заявку можна залишити на сайті, у Telegram, WhatsApp, електронною поштою або телефоном. Після заявки місця утримуються за пасажиром зі статусом «Очікує підтвердження».",
         "2.2. Бронювання стає остаточним після підтвердження менеджером. Менеджер узгоджує час, місце посадки та порядок оплати.",
         "2.3. Договір перевезення вважається укладеним з моменту підтвердження бронювання."
       ]
@@ -76,7 +76,7 @@ const uk: Terms = {
     {
       title: "9. Звернення",
       items: [
-        "9.1. Питання, побажання та скарги приймає менеджер телефоном +380 93 041 4853, у WhatsApp або Telegram @Transfer_Lux. Ми відповідаємо на кожне звернення."
+        "9.1. Питання, побажання та скарги приймає менеджер телефоном +380 93 041 4853, у WhatsApp, Telegram @Transfer_Lux або поштою transferlux01@gmail.com. Ми відповідаємо на кожне звернення."
       ]
     }
   ],
@@ -99,7 +99,7 @@ const en: Terms = {
     {
       title: "2. Booking and confirmation",
       items: [
-        "2.1. A request can be made on the website, in Telegram, WhatsApp or by phone. After the request the seats are held for the passenger with the status \"Awaiting confirmation\".",
+        "2.1. A request can be made on the website, in Telegram, WhatsApp, by email or by phone. After the request the seats are held for the passenger with the status \"Awaiting confirmation\".",
         "2.2. The booking becomes final once confirmed by the manager, who agrees the time, pick up point and payment method.",
         "2.3. The contract of carriage is concluded when the booking is confirmed."
       ]
@@ -155,7 +155,7 @@ const en: Terms = {
     {
       title: "9. Contact",
       items: [
-        "9.1. Questions, requests and complaints are handled by the manager at +380 93 041 4853, in WhatsApp or Telegram @Transfer_Lux. We reply to every message."
+        "9.1. Questions, requests and complaints are handled by the manager at +380 93 041 4853, in WhatsApp, Telegram @Transfer_Lux or by email at transferlux01@gmail.com. We reply to every message."
       ]
     }
   ],

@@ -5,7 +5,8 @@ import { quote, toUah, fmtEur, fmtUah } from "../../shared/price";
 import { api, newIdem, type RouteInfo, type Rate, type Trip } from "../api";
 import { LOCALE, CONTACTS, type Lang, type T } from "../i18n";
 import { Sheet } from "./Sheet";
-import { Swap, Minus, Plus, Chevron, Telegram, WhatsApp, Phone } from "./Icons";
+import { Swap, Minus, Plus, Chevron, Telegram, WhatsApp, Phone, Mail } from "./Icons";
+import { Contacts } from "./Panels";
 
 type Mode = "regular" | "individual";
 const cityName = (c: City | null, lang: Lang) => (c ? c.name[lang] : "");
@@ -118,6 +119,13 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
             </button>
           ))}
         </div>
+        {s.mode === "individual" ? (
+          <div className="ask">
+            <p className="ask__title">{t.askTitle}</p>
+            <p className="muted">{t.askText}</p>
+            <Contacts t={t} />
+          </div>
+        ) : (<>
         <div className="route-pills">
           <CityInput value={s.fromText} label={t.from} ph={t.fromPh} lang={lang} onText={(v) => set({ fromText: v })} onPick={(c) => set({ fromText: c.name[lang] })} />
           <button type="button" className="icon-btn swap" aria-label={t.swap} onClick={() => set({ fromText: s.toText, toText: s.fromText })}><Swap /></button>
@@ -132,8 +140,9 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
           <Stepper label={t.children} value={s.children} min={0} max={20} onChange={(v) => set({ children: v })} />
         </div>
         <button className="btn btn--primary btn--block" type="submit" disabled={!canGo}>
-          {s.mode === "regular" ? t.searchBtn : t.contactBtn}<Chevron />
+          {t.searchBtn}<Chevron />
         </button>
+        </>)}
       </form>
       <Sheet open={open} onClose={() => setOpen(false)} title={`${cityName(from, lang) || fromQ}  ${cityName(to, lang) || toQ}`} closeLabel={t.close}>
         <Result lang={lang} t={t} s={s} fromQ={fromQ} toQ={toQ} onMode={(m) => set({ mode: m })} />
@@ -234,6 +243,7 @@ function DirectContact({ lang, t, s, route }: { lang: Lang; t: T; s: SearchState
         <a className="contact" href={`${CONTACTS.telegram}?text=${enc}`} target="_blank" rel="noopener" onClick={copy}><Telegram /><span><b>Telegram</b><small>{CONTACTS.telegramLabel}</small></span><Chevron /></a>
         <a className="contact" href={`${CONTACTS.whatsapp}?text=${enc}`} target="_blank" rel="noopener"><WhatsApp /><span><b>WhatsApp</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
         <a className="contact" href={`tel:${CONTACTS.phone}`}><Phone /><span><b>{t.call}</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
+        <a className="contact" href={`mailto:${CONTACTS.email}?subject=TransferLux&body=${enc}`}><Mail /><span><b>{t.email}</b><small>{CONTACTS.email}</small></span><Chevron /></a>
       </div>
       <p className="muted small">{copied ? t.msgCopied : t.msgHint}</p>
     </div>
@@ -245,6 +255,7 @@ export function ContactRow({ t }: { t: T }) {
     <div className="contact-row">
       <a className="btn btn--ghost" href={CONTACTS.telegram} target="_blank" rel="noopener"><Telegram />{CONTACTS.telegramLabel}</a>
       <a className="btn btn--ghost" href={CONTACTS.whatsapp} target="_blank" rel="noopener"><WhatsApp />WhatsApp</a>
+      <a className="btn btn--ghost" href={`mailto:${CONTACTS.email}`}><Mail />{t.email}</a>
     </div>
   );
 }

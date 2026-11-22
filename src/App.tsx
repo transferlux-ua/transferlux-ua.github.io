@@ -9,9 +9,9 @@ import { SEO_ROUTES, HOME_ROUTES, slug, type SeoRoute } from "./seo";
 import { Search, fmtDuration } from "./ui/Search";
 import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
-import { Fleet, Trips, Team, Contacts } from "./ui/Panels";
+import { Fleet, Team, Contacts } from "./ui/Panels";
 import { Gallery } from "./ui/Gallery";
-import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Sun, Moon } from "./ui/Icons";
+import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Mail, Sun, Moon } from "./ui/Icons";
 
 type Theme = "dark" | "light";
 function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }) {
@@ -33,7 +33,7 @@ function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }
   );
 }
 
-type Panel = "fleet" | "trips" | "team" | "contacts" | "menu" | "terms" | null;
+type Panel = "fleet" | "team" | "contacts" | "menu" | "terms" | null;
 
 function TermsText({ lang }: { lang: Lang }) {
   const d = TERMS[lang];
@@ -81,7 +81,7 @@ export function App({ lang: initialLang, route }: AppProps) {
   const names: Record<string, string> = { ua: { uk: "Україна", en: "Ukraine" }[lang] };
   for (const k of ["paris", "brussels", "amsterdam", "berlin", "prague", "vienna", "milan", "warsaw", "budapest"]) names[k] = CITY_BY_ID[k].name[lang];
 
-  const nav: [Panel, string][] = [["fleet", t.navFleet], ["trips", t.navTrips], ["team", t.navTeam]];
+  const nav: [Panel, string][] = [["fleet", t.navFleet], ["team", t.navTeam]];
   const anchors: [string, string][] = [[route ? `${PREFIX[lang]}#gallery` : "#gallery", t.navGallery], ["#contacts", t.navContacts]];
   const r = route;
   const rFrom = r ? CITY_BY_ID[r.from].name[lang] : "";
@@ -176,6 +176,7 @@ export function App({ lang: initialLang, route }: AppProps) {
             <a className="contact" href={`tel:${CONTACTS.phone}`}><Phone /><span><b>{CONTACTS.phoneLabel}</b><small>{t.manager}, {t.call.toLowerCase()}</small></span></a>
             <a className="contact" href={CONTACTS.whatsapp} target="_blank" rel="noopener"><WhatsApp /><span><b>WhatsApp</b><small>{CONTACTS.phoneLabel}</small></span></a>
             <a className="contact" href={CONTACTS.telegram} target="_blank" rel="noopener"><Telegram /><span><b>Telegram</b><small>{CONTACTS.telegramLabel}</small></span></a>
+            <a className="contact" href={`mailto:${CONTACTS.email}`}><Mail /><span><b>{t.email}</b><small>{CONTACTS.email}</small></span></a>
             <a className="contact" href={CONTACTS.channel} target="_blank" rel="noopener"><Telegram /><span><b>{t.channel}</b><small>t.me/TransferLux</small></span></a>
           </div>
         </section>
@@ -188,13 +189,13 @@ export function App({ lang: initialLang, route }: AppProps) {
           <a href={`tel:${CONTACTS.phone}`}><Phone />{CONTACTS.phoneLabel}</a>
           <a href={CONTACTS.whatsapp} target="_blank" rel="noopener"><WhatsApp />WhatsApp</a>
           <a href={CONTACTS.telegram} target="_blank" rel="noopener"><Telegram />{CONTACTS.telegramLabel}</a>
+          <a href={`mailto:${CONTACTS.email}`}><Mail />{CONTACTS.email}</a>
           <a href={CONTACTS.channel} target="_blank" rel="noopener"><Telegram />{t.channel}</a>
         </div>
         <p className="muted small">© {new Date().getFullYear()} TransferLux · <button type="button" className="link" onClick={() => setPanel("terms")}>{t.terms}</button></p>
       </footer>
 
       <Sheet open={panel === "fleet"} title={t.fleetTitle} onClose={close} closeLabel={t.close} wide><Fleet t={t} /></Sheet>
-      <Sheet open={panel === "trips"} title={t.tripsAll} onClose={close} closeLabel={t.close}><Trips lang={lang} t={t} onPick={(from, to) => { setPanel(null); setPreset((p) => ({ from, to, n: (p?.n ?? 0) + 1 })); }} /></Sheet>
       <Sheet open={panel === "team"} title={t.teamTitle} onClose={close} closeLabel={t.close} wide><Team t={t} /></Sheet>
       <Sheet open={panel === "terms"} title={t.terms} onClose={close} closeLabel={t.close} wide><TermsText lang={lang} /></Sheet>
       <Sheet open={panel === "contacts"} title={t.contactsTitle} onClose={close} closeLabel={t.close}><Contacts t={t} /></Sheet>
