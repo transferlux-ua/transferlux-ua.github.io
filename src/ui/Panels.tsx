@@ -8,7 +8,7 @@ import { Lightbox } from "./Lightbox";
    every photo has a small TL mark in the bottom left corner. */
 type Car = { id: string; name: (t: T) => string; count: number; square?: boolean; pos?: string };
 const CARS: Car[] = [
-  { id: "sprinter-black", name: (t) => t.fleetBlack, count: 4, pos: "50% 58%" },
+  { id: "sprinter-white2",name: (t) => t.fleetBlack, count: 4, pos: "50% 58%" },
   { id: "sprinter-white", name: (t) => t.fleetWhite, count: 4, pos: "50% 62%" },
   { id: "vclass", name: () => "Mercedes‑Benz V‑Class", count: 7, square: true }
 ];
