@@ -36,21 +36,37 @@ function Stepper({ label, value, min, max, onChange }: { label: string; value: n
   );
 }
 
-function CityPicker({ value, label, lang, t, onPick }: { value: City | null; label: string; lang: Lang; t: T; onPick: (c: City) => void }) {
-  const [open, setOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const list = useMemo(() => suggestCities(q, 7), [q]);
+/** Typed city field with suggestions. Any text is accepted: known cities resolve to an id, others go to the geocoder. */
+function CityInput({ value, label, ph, lang, onText, onPick }: { value: string; label: string; ph: string; lang: Lang; onText: (v: string) => void; onPick: (c: City) => void }) {
+  const [focus, setFocus] = useState(false);
+  const [hi, setHi] = useState(-1);
+  const list = useMemo(() => suggestCities(value, 6), [value]);
+  // hide the list when the text already is exactly one suggestion
+  const exact = list.length > 0 && list[0].name[lang].toLowerCase() === value.trim().toLowerCase();
+  const show = focus && list.length > 0 && !exact;
+  const pick = (c: City) => { onPick(c); setHi(-1); setFocus(false); };
   return (
     <div className="pill-wrap">
-      <button type="button" className={`pill${value ? "" : " pill--empty"}`} onClick={() => { setOpen(!open); setQ(""); }} aria-expanded={open}>
+      <label className="pill city-in">
         <span className="pill__k">{label}</span>
-        <span className="pill__v">{value ? value.name[lang] : t.pickCity}</span>
-      </button>
-      {open && (
+        <input value={value} placeholder={ph} autoComplete="off" spellCheck={false} enterKeyHint="next"
+          role="combobox" aria-expanded={show} aria-autocomplete="list"
+          onChange={(e) => { onText(e.target.value); setHi(-1); setFocus(true); }}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setTimeout(() => setFocus(false), 150)}
+          onKeyDown={(e) => {
+            if (!show) return;
+            if (e.key === "ArrowDown") { e.preventDefault(); setHi((h) => Math.min(list.length - 1, h + 1)); }
+            else if (e.key === "ArrowUp") { e.preventDefault(); setHi((h) => Math.max(0, h - 1)); }
+            else if (e.key === "Enter" && hi >= 0) { e.preventDefault(); pick(list[hi]); }
+            else if (e.key === "Escape") setFocus(false);
+          }} />
+      </label>
+      {show && (
         <div className="pop" role="listbox">
-          <input autoFocus className="pop__input" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.pickCity} aria-label={label} />
-          {list.map((c) => (
-            <button type="button" role="option" key={c.id} className="pop__item" onClick={() => { onPick(c); setOpen(false); }}>
+          {list.map((c, i) => (
+            <button type="button" role="option" aria-selected={i === hi} key={c.id} className={`pop__item${i === hi ? " is-hi" : ""}`}
+              onMouseDown={(e) => e.preventDefault()} onClick={() => pick(c)}>
               {c.name[lang]}<small>{c.cc}</small>
             </button>
           ))}
@@ -60,12 +76,20 @@ function CityPicker({ value, label, lang, t, onPick }: { value: City | null; lab
   );
 }
 
-export interface SearchState { text: string; from: string | null; to: string | null; date: string; adults: number; children: number; mode: Mode }
+/** A single field resolves to a dictionary city when it clearly names one. */
+function resolveCity(text: string): City | null {
+  if (text.trim().length < 2) return null;
+  const r = parseRoute(text);
+  return r.from && !r.to && r.unknown.length === 0 ? r.from : null;
+}
+
+export interface SearchState { fromText: string; toText: string; date: string; adults: number; children: number; mode: Mode }
 
 export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset?: { from: string; to: string }; autoOpen?: boolean }) {
   const [s, setS] = useState<SearchState>(() => ({
-    text: preset ? `${CITY_BY_ID[preset.from].name[lang]} ${CITY_BY_ID[preset.to].name[lang]}` : "",
-    from: preset?.from ?? null, to: preset?.to ?? null, date: "", adults: 1, children: 0, mode: "regular"
+    fromText: preset ? CITY_BY_ID[preset.from].name[lang] : "",
+    toText: preset ? CITY_BY_ID[preset.to].name[lang] : "",
+    date: "", adults: 1, children: 0, mode: "regular"
   }));
   // the page is pre rendered at build time, so the default date is set in the browser
   const [minDate, setMinDate] = useState<string | undefined>(undefined);
@@ -74,22 +98,15 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
     setS((p) => (p.date ? p : { ...p, date: todayISO(1) }));
   }, []);
   const [open, setOpen] = useState(!!autoOpen);
-  const [unknown, setUnknown] = useState<string[]>([]);
-  const from = s.from ? CITY_BY_ID[s.from] : null;
-  const to = s.to ? CITY_BY_ID[s.to] : null;
+  const from = useMemo(() => resolveCity(s.fromText), [s.fromText]);
+  const to = useMemo(() => resolveCity(s.toText), [s.toText]);
 
-  const onText = (text: string) => {
-    const r = parseRoute(text);
-    setUnknown(r.unknown);
-    setS((p) => ({ ...p, text, from: r.from?.id ?? (text ? null : p.from), to: r.to?.id ?? (text ? null : p.to) }));
-  };
   const set = (patch: Partial<SearchState>) => setS((p) => ({ ...p, ...patch }));
-  const canGo = !!((from || unknown[0]) && (to || unknown[from ? 0 : 1])) && !!s.date;
+  // free text fallback for cities outside the dictionary (the server geocodes them)
+  const fromQ = from?.id ?? s.fromText.trim();
+  const toQ = to?.id ?? s.toText.trim();
+  const canGo = fromQ.length >= 2 && toQ.length >= 2 && fromQ !== toQ && !!s.date;
   const submit = (e: React.FormEvent) => { e.preventDefault(); if (canGo) setOpen(true); };
-
-  // free text fallback for cities outside the dictionary
-  const fromQ = from?.id ?? unknown[0] ?? "";
-  const toQ = to?.id ?? (from ? unknown[0] : unknown[1]) ?? "";
 
   return (
     <>
@@ -101,14 +118,10 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
             </button>
           ))}
         </div>
-        <label className="field field--route">
-          <span className="field__label">{t.routeLabel}</span>
-          <input value={s.text} onChange={(e) => onText(e.target.value)} placeholder={t.routePh} autoComplete="off" spellCheck={false} enterKeyHint="search" />
-        </label>
         <div className="route-pills">
-          <CityPicker value={from} label={t.from} lang={lang} t={t} onPick={(c) => set({ from: c.id, text: `${c.name[lang]} ${to ? to.name[lang] : ""}`.trim() })} />
-          <button type="button" className="icon-btn swap" aria-label={t.swap} onClick={() => set({ from: s.to, to: s.from, text: [to?.name[lang], from?.name[lang]].filter(Boolean).join(" ") })}><Swap /></button>
-          <CityPicker value={to} label={t.to} lang={lang} t={t} onPick={(c) => set({ to: c.id, text: `${from ? from.name[lang] : ""} ${c.name[lang]}`.trim() })} />
+          <CityInput value={s.fromText} label={t.from} ph={t.fromPh} lang={lang} onText={(v) => set({ fromText: v })} onPick={(c) => set({ fromText: c.name[lang] })} />
+          <button type="button" className="icon-btn swap" aria-label={t.swap} onClick={() => set({ fromText: s.toText, toText: s.fromText })}><Swap /></button>
+          <CityInput value={s.toText} label={t.to} ph={t.toPh} lang={lang} onText={(v) => set({ toText: v })} onPick={(c) => set({ toText: c.name[lang] })} />
         </div>
         <div className="search__row">
           <label className="field field--date">
@@ -121,7 +134,6 @@ export function Search({ lang, t, preset, autoOpen }: { lang: Lang; t: T; preset
         <button className="btn btn--primary btn--block" type="submit" disabled={!canGo}>
           {s.mode === "regular" ? t.searchBtn : t.contactBtn}<Chevron />
         </button>
-        {!canGo && s.text.length > 2 && <p className="search__hint">{t.notRecognized}</p>}
       </form>
       <Sheet open={open} onClose={() => setOpen(false)} title={`${cityName(from, lang) || fromQ}  ${cityName(to, lang) || toQ}`} closeLabel={t.close}>
         <Result lang={lang} t={t} s={s} fromQ={fromQ} toQ={toQ} onMode={(m) => set({ mode: m })} />
@@ -297,6 +309,7 @@ function BookingForm({ lang, t, kind, s, route, trip, onBack }: { lang: Lang; t:
       <input className="hp" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} name="website" aria-hidden="true" />
       {err && <div className="notice notice--warn" role="alert"><p>{err}</p>{err === t.errNet && <ContactRow t={t} />}</div>}
       <button className="btn btn--primary btn--block" type="submit" disabled={state === "sending"}>{state === "sending" ? t.sending : t.send}</button>
+      <p className="muted small">{t.termsAgree}</p>
     </form>
   );
 }

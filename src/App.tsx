@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { DICT, LANGS, LOCALE, PREFIX, CONTACTS, type Lang } from "./i18n";
 import { CITY_BY_ID } from "../shared/cities";
-import { quote, fmtEur } from "../shared/price";
+import { quote, fmtEur, fmtUah, toUah } from "../shared/price";
+import { api } from "./api";
+import { TERMS } from "./terms";
 import { CROSSING_NAMES } from "../shared/crossings";
 import { SEO_ROUTES, HOME_ROUTES, slug, type SeoRoute } from "./seo";
 import { Search, fmtDuration } from "./ui/Search";
@@ -31,7 +33,23 @@ function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }
   );
 }
 
-type Panel = "fleet" | "trips" | "team" | "contacts" | "menu" | null;
+type Panel = "fleet" | "trips" | "team" | "contacts" | "menu" | "terms" | null;
+
+function TermsText({ lang }: { lang: Lang }) {
+  const d = TERMS[lang];
+  return (
+    <div className="terms">
+      <p className="lead">{d.intro}</p>
+      {d.sections.map((s) => (
+        <section key={s.title}>
+          <h3>{s.title}</h3>
+          {s.items.map((it) => <p key={it}>{it}</p>)}
+        </section>
+      ))}
+      <p className="muted small">{d.updated}</p>
+    </div>
+  );
+}
 export interface AppProps { lang: Lang; route?: SeoRoute | null }
 
 export const pathFor = (lang: Lang, route?: SeoRoute | null) => PREFIX[lang] + (route ? `routes/${slug(route)}/` : "");
@@ -43,6 +61,10 @@ export function App({ lang: initialLang, route }: AppProps) {
   const t = DICT[lang];
   const loc = LOCALE[lang];
   const close = useCallback(() => setPanel(null), []);
+  // NBU rate for hryvnia prices; loaded in the browser, the pre rendered page shows euro only
+  const [rate, setRate] = useState<number | null>(null);
+  useEffect(() => { api.rate().then((r) => setRate(r.rate)).catch(() => {}); }, []);
+  const uah = (cents: number) => (rate ? fmtUah(toUah(cents, rate), loc) : null);
 
   const switchLang = (l: Lang) => {
     setLang(l);
@@ -117,8 +139,8 @@ export function App({ lang: initialLang, route }: AppProps) {
               <div><dt>{t.distanceRoad}</dt><dd>{new Intl.NumberFormat(loc, { maximumFractionDigits: 0 }).format(r.km)} {t.km}</dd></div>
               <div><dt>{t.travelTime}</dt><dd>{fmtDuration(r.minutes, t)}<small>{t.noBorder}</small></dd></div>
               {r.via && <div><dt>{t.border}</dt><dd>{CROSSING_NAMES[r.via]?.[lang]}</dd></div>}
-              <div><dt>{t.priceAdult}</dt><dd>{fmtEur(quote(r.km, 1, 0).adultCents, loc)}</dd></div>
-              <div><dt>{t.priceChild}</dt><dd>{fmtEur(quote(r.km, 0, 1).childCents, loc)}</dd></div>
+              <div><dt>{t.priceAdult}</dt><dd>{fmtEur(quote(r.km, 1, 0).adultCents, loc)}{rate && <small>{uah(quote(r.km, 1, 0).adultCents)}</small>}</dd></div>
+              <div><dt>{t.priceChild}</dt><dd>{fmtEur(quote(r.km, 0, 1).childCents, loc)}{rate && <small>{uah(quote(r.km, 0, 1).childCents)}</small>}</dd></div>
             </dl>
             <p className="prose">{t.routeText(rFrom, rTo, new Intl.NumberFormat(loc, { maximumFractionDigits: 0 }).format(r.km), fmtDuration(r.minutes, t), r.via ? CROSSING_NAMES[r.via]?.[lang] ?? null : null)}</p>
           </section>
@@ -133,6 +155,7 @@ export function App({ lang: initialLang, route }: AppProps) {
                   <span>{CITY_BY_ID[x.from].name[lang]}<i aria-hidden="true" />{CITY_BY_ID[x.to].name[lang]}</span>
                   <small>{new Intl.NumberFormat(loc, { maximumFractionDigits: 0 }).format(x.km)} {t.km}</small>
                   <b>{t.fromPrice} {fmtEur(quote(x.km, 1, 0).adultCents, loc)}</b>
+                  {rate && <em>{uah(quote(x.km, 1, 0).adultCents)}</em>}
                 </a>
               </li>
             ))}
@@ -167,17 +190,19 @@ export function App({ lang: initialLang, route }: AppProps) {
           <a href={CONTACTS.telegram} target="_blank" rel="noopener"><Telegram />{CONTACTS.telegramLabel}</a>
           <a href={CONTACTS.channel} target="_blank" rel="noopener"><Telegram />{t.channel}</a>
         </div>
-        <p className="muted small">© {new Date().getFullYear()} TransferLux</p>
+        <p className="muted small">© {new Date().getFullYear()} TransferLux · <button type="button" className="link" onClick={() => setPanel("terms")}>{t.terms}</button></p>
       </footer>
 
       <Sheet open={panel === "fleet"} title={t.fleetTitle} onClose={close} closeLabel={t.close} wide><Fleet t={t} /></Sheet>
       <Sheet open={panel === "trips"} title={t.tripsAll} onClose={close} closeLabel={t.close}><Trips lang={lang} t={t} onPick={(from, to) => { setPanel(null); setPreset((p) => ({ from, to, n: (p?.n ?? 0) + 1 })); }} /></Sheet>
       <Sheet open={panel === "team"} title={t.teamTitle} onClose={close} closeLabel={t.close} wide><Team t={t} /></Sheet>
+      <Sheet open={panel === "terms"} title={t.terms} onClose={close} closeLabel={t.close} wide><TermsText lang={lang} /></Sheet>
       <Sheet open={panel === "contacts"} title={t.contactsTitle} onClose={close} closeLabel={t.close}><Contacts t={t} /></Sheet>
       <Sheet open={panel === "menu"} title={t.menu} onClose={close} closeLabel={t.close}>
         <nav className="menu">
           {nav.map(([k, l]) => <button key={k} type="button" onClick={() => setPanel(k)}>{l}</button>)}
           {anchors.map(([h, l]) => <a key={h} href={h} onClick={close}>{l}</a>)}
+          <button type="button" onClick={() => setPanel("terms")}>{t.terms}</button>
         </nav>
         <div className="langs langs--lg" role="group" aria-label="Language">
           {LANGS.map((l) => <button key={l} type="button" className={l === lang ? "is-on" : ""} onClick={() => switchLang(l)}>{l === "uk" ? "UA" : l.toUpperCase()}</button>)}
