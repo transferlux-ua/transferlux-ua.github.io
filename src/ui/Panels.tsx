@@ -2,9 +2,9 @@ import { CONTACTS, type T } from "../i18n";
 import { Chevron, Mail, Phone, Telegram, WhatsApp } from "./Icons";
 
 /* Fleet: a short selection on purpose. More photos and the choice of a vehicle go through the manager.
-   BLACK gets the new exterior photo of the black Sprinter first once it is added to /img. */
+   Licence plates on photos are replaced with a TransferLux plate. */
 const MAIN = "sprinter-white-two";
-const BLACK = ["sprinter-black-door"];
+const BLACK = ["sprinter-black-front", "sprinter-black-door"];
 const WHITE = ["seat-recliner-closeup", "interior-white-diamond"];
 const VCLASS_MAIN = "vclass-01";
 const VCLASS = ["vclass-02", "vclass-03", "vclass-04", "vclass-05", "vclass-06", "vclass-07"];
