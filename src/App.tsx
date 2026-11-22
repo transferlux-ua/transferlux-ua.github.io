@@ -11,6 +11,7 @@ import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
 import { Fleet, Team, Contacts } from "./ui/Panels";
 import { Gallery } from "./ui/Gallery";
+import { Reviews } from "./ui/Reviews";
 import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Mail, Sun, Moon } from "./ui/Icons";
 
 type Theme = "dark" | "light";
@@ -82,7 +83,11 @@ export function App({ lang: initialLang, route }: AppProps) {
   for (const k of ["paris", "brussels", "amsterdam", "berlin", "prague", "vienna", "milan", "warsaw", "budapest"]) names[k] = CITY_BY_ID[k].name[lang];
 
   const nav: [Panel, string][] = [["fleet", t.navFleet], ["team", t.navTeam]];
-  const anchors: [string, string][] = [[route ? `${PREFIX[lang]}#gallery` : "#gallery", t.navGallery], ["#contacts", t.navContacts]];
+  const anchors: [string, string][] = [
+    [route ? `${PREFIX[lang]}#reviews` : "#reviews", t.navReviews],
+    [route ? `${PREFIX[lang]}#gallery` : "#gallery", t.navGallery],
+    ["#contacts", t.navContacts]
+  ];
   const r = route;
   const rFrom = r ? CITY_BY_ID[r.from].name[lang] : "";
   const rTo = r ? CITY_BY_ID[r.to].name[lang] : "";
@@ -161,6 +166,14 @@ export function App({ lang: initialLang, route }: AppProps) {
             ))}
           </ul>
         </section>
+
+        {!r && (
+          <section className="block" id="reviews">
+            <h2 className="h2">{t.reviewsTitle}</h2>
+            <p className="lead">{t.reviewsLead}</p>
+            <Reviews title={t.reviewsTitle} closeLabel={t.close} prevLabel={t.prev} nextLabel={t.next} />
+          </section>
+        )}
 
         {!r && (
           <section className="block" id="gallery">
