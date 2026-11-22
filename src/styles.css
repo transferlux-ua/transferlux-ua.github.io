@@ -141,14 +141,18 @@ h1, h2, h3, p { margin: 0; }
 .ask { display: grid; gap: 10px; }
 .ask__title { margin: 0; font-family: var(--display); font-size: 26px; line-height: 1.1; }
 .ask .muted { margin: 0; }
-.fleet__main { width: 100%; border-radius: var(--r); aspect-ratio: 4 / 3; object-fit: cover; }
-.fleet__group h3 { margin: 6px 0 10px; font-size: 15px; font-weight: 600; }
-.fleet__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.fleet__grid--one { grid-template-columns: minmax(0, 1fr); }
-.fleet__grid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-sm); }
-.fleet__grid--one img { aspect-ratio: 4 / 3; }
-.fleet__grid--square img { aspect-ratio: 1 / 1; }
-.fleet__group .fleet__main { margin-bottom: 8px; }
+/* fleet: one card per vehicle, exterior on the left, interior on the right */
+.car { display: grid; gap: 12px; }
+.car__name { margin: 0; font-family: var(--display); font-size: clamp(22px, 2.4vw, 30px); font-weight: 400; }
+.car__grid { display: grid; grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(0, 1fr)); gap: 8px; }
+.car--square .car__grid { grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); }
+.car__tile { position: relative; overflow: hidden; border-radius: var(--r-sm); background: var(--surface); cursor: zoom-in; aspect-ratio: 3 / 4; }
+.car--square .car__tile { aspect-ratio: 1 / 1; }
+.car__tile--ext, .car--square .car__tile--ext { aspect-ratio: auto; }
+.car--square .car__tile--ext { grid-row: span 2; }
+.car__tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
+.car__tile:hover img { transform: scale(1.03); }
+.fleet__ask { margin: 0; }
 .city-in { cursor: text; gap: 2px; padding: 9px 12px 8px; }
 .city-in:focus-within { border-color: var(--gold); }
 .city-in input { width: 100%; min-width: 0; height: 26px; padding: 0; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 16px; font-weight: 500; }
@@ -265,8 +269,7 @@ main { min-height: 50vh; }
 
 /* ---------- panels ---------- */
 .lead { color: var(--text-2); font-size: 15px; margin-bottom: 16px; }
-.fleet { display: grid; gap: 16px; }
-.fleet .lead { margin: 0; }
+.fleet { display: grid; gap: clamp(28px, 4vw, 44px); }
 @keyframes fade { from { opacity: 0; } }
 .team img { border-radius: var(--r); width: 100%; height: auto; max-height: 64vh; object-fit: cover; object-position: 50% 70%; }
 .team .lead { margin-top: 16px; }
@@ -304,7 +307,7 @@ main { min-height: 50vh; }
 .nav a { padding: 8px 12px; border-radius: var(--r-sm); color: var(--text-2); font-size: 14px; transition: color 0.2s, background 0.2s; }
 .nav a:hover { color: var(--text); background: var(--surface); }
 .menu a { text-align: left; padding: 16px 0; font-family: var(--display); font-size: 30px; border-bottom: 1px solid var(--line); }
-#reviews, #contacts { scroll-margin-top: 72px; }
+#fleet, #reviews, #contacts { scroll-margin-top: 72px; }
 
 /* ---------- footer ---------- */
 .foot { border-top: 1px solid var(--line); padding: 32px var(--pad) 40px; display: grid; gap: 14px; max-width: 1360px; margin: 24px auto 0; }
@@ -331,6 +334,8 @@ main { min-height: 50vh; }
 
 /* ---------- phone ---------- */
 @media (max-width: 640px) {
+  .car__grid, .car--square .car__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .car__tile--ext, .car--square .car__tile--ext { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 1 / 1; }
   .top { height: 56px; gap: 10px; }
   .brand__word { font-size: 15px; }
   .top__tg { display: none; }

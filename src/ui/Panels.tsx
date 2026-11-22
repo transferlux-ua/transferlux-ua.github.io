@@ -1,43 +1,48 @@
+import { useState } from "react";
 import { CONTACTS, type T } from "../i18n";
 import { Chevron, Mail, Phone, Telegram, WhatsApp } from "./Icons";
+import { Lightbox } from "./Lightbox";
 
-/* Fleet: a short selection on purpose. More photos and the choice of a vehicle go through the manager.
-   Licence plates on photos are replaced with a TransferLux plate. */
-const MAIN = "sprinter-white-two";
-const BLACK = ["sprinter-black-front", "sprinter-black-door"];
-const WHITE = ["seat-recliner-closeup", "interior-white-diamond"];
-const VCLASS_MAIN = "vclass-01";
-const VCLASS = ["vclass-02", "vclass-03", "vclass-04", "vclass-05", "vclass-06", "vclass-07"];
+/* Fleet: every vehicle is shown the same way, one exterior photo first, then its interior.
+   Photos live in /img/fleet/<id>-<n>.jpg (n = 1 is the exterior). Licence plates are replaced
+   with a TransferLux plate, every photo has a small TL mark in the bottom left corner. */
+type Car = { id: string; name: (t: T) => string; count: number; square?: boolean; pos?: string };
+const CARS: Car[] = [
+  { id: "sprinter-black", name: (t) => t.fleetBlack, count: 4, pos: "50% 82%" },
+  { id: "sprinter-white", name: (t) => t.fleetWhite, count: 4, pos: "50% 62%" },
+  { id: "vclass", name: () => "Mercedes‑Benz V‑Class", count: 7, square: true }
+];
+const src = (id: string, n: number, small?: boolean) => `/img/fleet/${id}-${n}${small ? "-640" : ""}.jpg`;
 
-function Photo({ name, alt, wide }: { name: string; alt: string; wide?: boolean }) {
+function CarCard({ car, t }: { car: Car; t: T }) {
+  const [open, setOpen] = useState<number | null>(null);
+  const name = car.name(t);
+  const nums = Array.from({ length: car.count }, (_, i) => i + 1);
   return (
-    <img className={wide ? "fleet__main" : undefined} src={`/img/${name}.jpg`} srcSet={`/img/${name}-640.jpg 640w, /img/${name}.jpg 1280w`}
-      sizes={wide ? "(max-width: 760px) 100vw, 720px" : "(max-width: 760px) 50vw, 360px"} alt={alt} loading="lazy" decoding="async" />
+    <article className={`car${car.square ? " car--square" : ""}`}>
+      <h3 className="car__name">{name}</h3>
+      <div className="car__grid">
+        {nums.map((n, i) => (
+          <button key={n} type="button" className={`car__tile${n === 1 ? " car__tile--ext" : ""}`} onClick={() => setOpen(i)}
+            aria-label={`${name}, ${n === 1 ? t.exterior : t.interior} ${n === 1 ? "" : n - 1}`.trim()}>
+            <img src={src(car.id, n, true)} alt={`${name}, ${n === 1 ? t.exterior : t.interior}`} loading="lazy" decoding="async"
+              style={n === 1 && car.pos ? { objectPosition: car.pos } : undefined} />
+          </button>
+        ))}
+      </div>
+      {open !== null && (
+        <Lightbox srcs={nums.map((n) => src(car.id, n))} index={open} onIndex={setOpen} onClose={() => setOpen(null)}
+          title={name} closeLabel={t.close} prevLabel={t.prev} nextLabel={t.next} />
+      )}
+    </article>
   );
 }
 
 export function Fleet({ t }: { t: T }) {
   return (
     <div className="fleet">
-      <p className="lead">{t.fleetLead}</p>
-      <Photo name={MAIN} alt="Mercedes-Benz Sprinter TransferLux" wide />
-      <section className="fleet__group">
-        <h3>{t.fleetBlack}</h3>
-        <div className={`fleet__grid${BLACK.length === 1 ? " fleet__grid--one" : ""}`}>{BLACK.map((p) => <Photo key={p} name={p} alt={t.fleetBlack} />)}</div>
-      </section>
-      <section className="fleet__group">
-        <h3>{t.fleetWhite}</h3>
-        <div className="fleet__grid">{WHITE.map((p) => <Photo key={p} name={p} alt={t.fleetWhite} />)}</div>
-      </section>
-      <section className="fleet__group">
-        <h3>Mercedes-Benz V-Class</h3>
-        <Photo name={VCLASS_MAIN} alt="Mercedes-Benz V-Class TransferLux" wide />
-        <div className="fleet__grid fleet__grid--square">{VCLASS.map((p) => <Photo key={p} name={p} alt="Mercedes-Benz V-Class" />)}</div>
-      </section>
-      <div className="notice">
-        <p>{t.fleetAsk}</p>
-      </div>
-      <Contacts t={t} />
+      {CARS.map((c) => <CarCard key={c.id} car={c} t={t} />)}
+      <p className="muted fleet__ask">{t.fleetAsk}</p>
     </div>
   );
 }

@@ -33,7 +33,7 @@ function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string } }
   );
 }
 
-type Panel = "fleet" | "team" | "contacts" | "menu" | "terms" | null;
+type Panel = "team" | "contacts" | "menu" | "terms" | null;
 
 function TermsText({ lang }: { lang: Lang }) {
   const d = TERMS[lang];
@@ -81,10 +81,13 @@ export function App({ lang: initialLang, route }: AppProps) {
   const names: Record<string, string> = { ua: { uk: "Україна", en: "Ukraine" }[lang] };
   for (const k of ["paris", "brussels", "amsterdam", "berlin", "prague", "vienna", "milan", "warsaw", "budapest"]) names[k] = CITY_BY_ID[k].name[lang];
 
-  const nav: [Panel, string][] = [["fleet", t.navFleet], ["team", t.navTeam]];
-  const anchors: [string, string][] = [
-    [route ? `${PREFIX[lang]}#reviews` : "#reviews", t.navReviews],
-    ["#contacts", t.navContacts]
+  // home page sections are anchors (on route pages they lead back to the home page), the team opens a panel
+  const home = (id: string) => (route ? `${PREFIX[lang]}#${id}` : `#${id}`);
+  const navItems: { label: string; href?: string; panel?: Panel }[] = [
+    { label: t.navFleet, href: home("fleet") },
+    { label: t.navTeam, panel: "team" },
+    { label: t.navReviews, href: home("reviews") },
+    { label: t.navContacts, href: "#contacts" }
   ];
   const r = route;
   const rFrom = r ? CITY_BY_ID[r.from].name[lang] : "";
@@ -97,8 +100,9 @@ export function App({ lang: initialLang, route }: AppProps) {
           <Mark className="brand__mark" /><span className="brand__word">TransferLux</span>
         </a>
         <nav className="nav" aria-label="main">
-          {nav.map(([k, l]) => <button key={k} type="button" onClick={() => setPanel(k)}>{l}</button>)}
-          {anchors.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
+          {navItems.map((it) => it.panel
+            ? <button key={it.label} type="button" onClick={() => setPanel(it.panel!)}>{it.label}</button>
+            : <a key={it.label} href={it.href}>{it.label}</a>)}
         </nav>
         <div className="top__right">
           <div className="langs" role="group" aria-label="Language">
@@ -166,6 +170,14 @@ export function App({ lang: initialLang, route }: AppProps) {
         </section>
 
         {!r && (
+          <section className="block" id="fleet">
+            <h2 className="h2">{t.fleetTitle}</h2>
+            <p className="lead">{t.fleetLead}</p>
+            <Fleet t={t} />
+          </section>
+        )}
+
+        {!r && (
           <section className="block" id="reviews">
             <h2 className="h2">{t.reviewsTitle}</h2>
             <p className="lead">{t.reviewsLead}</p>
@@ -199,14 +211,14 @@ export function App({ lang: initialLang, route }: AppProps) {
         <p className="muted small">© {new Date().getFullYear()} TransferLux · <button type="button" className="link" onClick={() => setPanel("terms")}>{t.terms}</button></p>
       </footer>
 
-      <Sheet open={panel === "fleet"} title={t.fleetTitle} onClose={close} closeLabel={t.close} wide><Fleet t={t} /></Sheet>
       <Sheet open={panel === "team"} title={t.teamTitle} onClose={close} closeLabel={t.close} wide><Team t={t} /></Sheet>
       <Sheet open={panel === "terms"} title={t.terms} onClose={close} closeLabel={t.close} wide><TermsText lang={lang} /></Sheet>
       <Sheet open={panel === "contacts"} title={t.contactsTitle} onClose={close} closeLabel={t.close}><Contacts t={t} /></Sheet>
       <Sheet open={panel === "menu"} title={t.menu} onClose={close} closeLabel={t.close}>
         <nav className="menu">
-          {nav.map(([k, l]) => <button key={k} type="button" onClick={() => setPanel(k)}>{l}</button>)}
-          {anchors.map(([h, l]) => <a key={h} href={h} onClick={close}>{l}</a>)}
+          {navItems.map((it) => it.panel
+            ? <button key={it.label} type="button" onClick={() => setPanel(it.panel!)}>{it.label}</button>
+            : <a key={it.label} href={it.href} onClick={close}>{it.label}</a>)}
           <button type="button" onClick={() => setPanel("terms")}>{t.terms}</button>
         </nav>
         <div className="langs langs--lg" role="group" aria-label="Language">
