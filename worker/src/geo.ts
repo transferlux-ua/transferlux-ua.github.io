@@ -5,7 +5,7 @@ import { CITY_BY_ID } from "../../shared/cities";
 import { CROSSINGS } from "../../shared/crossings";
 export { CROSSINGS };
 
-const UA = "TransferLux/2.0 (+https://transferlux-ua.github.io)";
+const UA = "TransferLux/2.0 (+https://transferlux.net)";
 
 export interface Place { id: string; label: string; cc: string; lat: number; lon: number }
 

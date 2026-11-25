@@ -6,7 +6,7 @@ import { CITY_BY_ID } from "../shared/cities";
 import { quote } from "../shared/price";
 import { CROSSING_NAMES } from "../shared/crossings";
 
-export const SITE = "https://transferlux-ua.github.io";
+export const SITE = "https://transferlux.net";
 
 export function pages() {
   const out: { path: string; lang: Lang; route: string | null }[] = [];
