@@ -198,12 +198,14 @@ function Result({ lang, t, s, fromQ, toQ, onMode }: { lang: Lang; t: T; s: Searc
         </div>
       )}
 
-      {s.mode === "regular" && !trip && (
+      {s.mode === "regular" && !trip && trips !== null && trips.length === 0 && (
+        <OrderRoute lang={lang} t={t} s={s} route={route} price={fmtEur(q.totalCents, loc)} />
+      )}
+
+      {s.mode === "regular" && !trip && (trips === null || trips.length > 0) && (
         <section className="trips">
           <h3>{t.tripsTitle}</h3>
-          {trips === null ? <div className="loading"><span className="spinner" aria-hidden="true" /></div> : trips.length === 0 ? (
-            <div className="notice"><p>{t.noTrips}</p><p className="muted">{t.noTripsHint}</p><button type="button" className="btn btn--ghost" onClick={() => onMode("individual")}>{t.requestIndividual}</button></div>
-          ) : (
+          {trips === null ? <div className="loading"><span className="spinner" aria-hidden="true" /></div> : (
             <ul className="trip-list">
               {trips.map((tr) => (
                 <li key={tr.id}>
@@ -223,6 +225,28 @@ function Result({ lang, t, s, fromQ, toQ, onMode }: { lang: Lang; t: T; s: Searc
         <BookingForm lang={lang} t={t} kind="regular" s={s} route={route} trip={trip} onBack={() => setTrip(null)} />
       )}
       {s.mode === "individual" && <DirectContact lang={lang} t={t} s={s} route={route} />}
+    </div>
+  );
+}
+
+/** Regular route without scheduled trips: one main button that opens Telegram, other contacts below. */
+function OrderRoute({ lang, t, s, route, price }: { lang: Lang; t: T; s: SearchState; route: RouteInfo; price: string }) {
+  const a = CITY_BY_ID[route.from.id]?.name[lang] ?? route.from.label;
+  const b = CITY_BY_ID[route.to.id]?.name[lang] ?? route.to.label;
+  const msg = t.msgRegular(a, b, fmtDate(s.date, lang), t.passengers(s.adults, s.children), price);
+  const enc = encodeURIComponent(msg);
+  const [copied, setCopied] = useState(false);
+  const copy = () => { navigator.clipboard?.writeText(msg).then(() => setCopied(true)).catch(() => {}); };
+  return (
+    <div className="direct order">
+      <a className="btn btn--primary btn--block" href={`${CONTACTS.telegram}?text=${enc}`} target="_blank" rel="noopener" onClick={copy}><Telegram />{t.orderRoute}</a>
+      <p className="muted small">{copied ? t.msgCopied : t.orderLead}</p>
+      <p className="order__other">{t.orderOther}</p>
+      <div className="contacts">
+        <a className="contact" href={`${CONTACTS.whatsapp}?text=${enc}`} target="_blank" rel="noopener"><WhatsApp /><span><b>WhatsApp</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
+        <a className="contact" href={`tel:${CONTACTS.phone}`}><Phone /><span><b>{t.call}</b><small>{CONTACTS.phoneLabel}</small></span><Chevron /></a>
+        <a className="contact" href={`mailto:${CONTACTS.email}?subject=TransferLux&body=${enc}`}><Mail /><span><b>{t.email}</b><small>{CONTACTS.email}</small></span><Chevron /></a>
+      </div>
     </div>
   );
 }

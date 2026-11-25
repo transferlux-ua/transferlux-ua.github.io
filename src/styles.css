@@ -265,6 +265,9 @@ main { min-height: 50vh; }
 .contact-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .direct { display: grid; gap: 14px; }
 .direct .lead { margin: 0; }
+.order { margin-top: 4px; }
+.order .muted { margin: -4px 0 0; }
+.order__other { margin: 6px 0 0; font-size: 13px; color: var(--text-2); }
 .msg-preview { border: 1px solid var(--line); border-left: 2px solid var(--gold); border-radius: var(--r-sm); padding: 12px 14px; color: var(--text-2); font-size: 14px; background: var(--surface); }
 
 /* ---------- panels ---------- */
