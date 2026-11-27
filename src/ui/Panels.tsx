@@ -47,11 +47,32 @@ export function Fleet({ t }: { t: T }) {
   );
 }
 
+/* Drivers: photo files live in /img/team/<id>.jpg (800w) and <id>-400.jpg, 4:5 with a small TL mark. */
+const DRIVERS: { id: string; name: { uk: string; en: string } }[] = [
+  { id: "volodymyr", name: { uk: "Володимир", en: "Volodymyr" } },
+  { id: "oleksandr", name: { uk: "Олександр", en: "Oleksandr" } },
+  { id: "anatolii", name: { uk: "Анатолій", en: "Anatolii" } },
+  { id: "vladyslav", name: { uk: "Владислав", en: "Vladyslav" } },
+  { id: "hennadii", name: { uk: "Геннадій", en: "Hennadii" } },
+  { id: "mykola", name: { uk: "Микола", en: "Mykola" } }
+];
+
 export function Team({ t }: { t: T }) {
+  const en = t.teamTitle === "Team";
   return (
     <div className="team">
-      <img src="/img/team-drivers.jpg" srcSet="/img/team-drivers-640.jpg 640w, /img/team-drivers.jpg 1099w" sizes="(max-width: 760px) 100vw, 1280px"
-        alt={t.teamTitle} width={1099} height={1280} loading="lazy" decoding="async" />
+      <ul className="drivers">
+        {DRIVERS.map((d) => {
+          const name = en ? d.name.en : d.name.uk;
+          return (
+            <li key={d.id} className="driver">
+              <img src={`/img/team/${d.id}-400.jpg`} srcSet={`/img/team/${d.id}-400.jpg 400w, /img/team/${d.id}.jpg 800w`}
+                sizes="(max-width: 560px) 50vw, 250px" alt={`${t.driver} ${name}`} width={400} height={500} loading="lazy" decoding="async" />
+              <p className="driver__name"><small>{t.driver}</small>{name}</p>
+            </li>
+          );
+        })}
+      </ul>
       <p className="lead">{t.teamText}</p>
     </div>
   );
