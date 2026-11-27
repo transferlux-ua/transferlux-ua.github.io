@@ -38,6 +38,17 @@ function CarCard({ car, t }: { car: Car; t: T }) {
   );
 }
 
+/** Big notice above the fleet: the site shows only part of the vehicles, the rest is in the Telegram channel. */
+export function FleetNote({ t }: { t: T }) {
+  return (
+    <div className="fleet-note">
+      <p className="fleet-note__title">{t.fleetNoteTitle}</p>
+      <p className="fleet-note__text">{t.fleetNoteText}</p>
+      <a className="btn btn--primary" href={CONTACTS.channel} target="_blank" rel="noopener"><Telegram />{t.fleetNoteBtn}</a>
+    </div>
+  );
+}
+
 export function Fleet({ t }: { t: T }) {
   return (
     <div className="fleet">

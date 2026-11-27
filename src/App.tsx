@@ -9,7 +9,7 @@ import { SEO_ROUTES, HOME_ROUTES, slug, type SeoRoute } from "./seo";
 import { Search, fmtDuration } from "./ui/Search";
 import { Sheet } from "./ui/Sheet";
 import { Scheme } from "./ui/Scheme";
-import { Fleet, Team, Contacts } from "./ui/Panels";
+import { Fleet, FleetNote, Team, Contacts } from "./ui/Panels";
 import { Reviews } from "./ui/Reviews";
 import { Mark, Menu, Arrows, Telegram, WhatsApp, Phone, Mail, Sun, Moon } from "./ui/Icons";
 
@@ -172,6 +172,7 @@ export function App({ lang: initialLang, route }: AppProps) {
           <section className="block" id="fleet">
             <h2 className="h2">{t.fleetTitle}</h2>
             <p className="lead">{t.fleetLead}</p>
+            <FleetNote t={t} />
             <Fleet t={t} />
           </section>
         )}
