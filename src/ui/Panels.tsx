@@ -62,7 +62,7 @@ export function Fleet({ t }: { t: T }) {
 const DRIVERS: { id: string; name: { uk: string; en: string } }[] = [
   { id: "volodymyr", name: { uk: "Володимир", en: "Volodymyr" } },
   { id: "oleksandr", name: { uk: "Олександр", en: "Oleksandr" } },
-  { id: "anatolii", name: { uk: "Анатолій", en: "Anatolii" } },
+  { id: "anton", name: { uk: "Антон", en: "Anton" } },
   { id: "vladyslav", name: { uk: "Владислав", en: "Vladyslav" } },
   { id: "hennadii", name: { uk: "Геннадій", en: "Hennadii" } },
   { id: "mykola", name: { uk: "Микола", en: "Mykola" } }
